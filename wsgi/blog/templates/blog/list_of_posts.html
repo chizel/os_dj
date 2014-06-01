@@ -1,0 +1,53 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="content">
+<h2>{{ title }}</h2>
+
+{% if user.is_authenticated %}
+<p><a href="{% url 'blog:add_post' %}">Add post</a></p>
+{% endif %}
+
+<!-- posts -->
+{% for post in posts %}
+<div>
+    <p><a href="{{post.get_absolute_url}}">{{ post.title }}</a> | {{post.count_comments}} comments |
+    <script>document.write(moment("{{post.date|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
+    |Author: <a href="{{ post.user.get_absolute_url }}">{{ post.user.user.username }}</a>
+    </p>
+</div>
+{% endfor %}
+<!-- end posts -->
+!!!
+<a href="{% url 'social:begin' "facebook" %}" class="fb sn-logo">FB</a>
+<a href="{% url 'social:begin' "google-oauth2" %}" class="google sn-logo">G+</a>
+<a href="{% url 'social:begin' "twitter" %}" class="twitter sn-logo">Twitter</a>
+<a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+<a href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
+  
+
+
+<!-- paginator --!>
+<div>
+    {% if posts.number > 1 %}
+        |<a href="{% url 'blog:list_of_posts'%}1/"> 1 </a>
+    {% endif %}
+    {% if posts.has_previous %}
+
+        |<a href="{% url 'blog:list_of_posts' %}{{ posts.previous_page_number}}/"> <<< </a>|
+    {% endif %}
+
+    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+    {% if posts.has_next %}
+        |<a href="{% url 'blog:list_of_posts' %}{{ posts.next_page_number}}/"> >>> </a>|
+    {% endif %}
+    {% if posts.next_page_number < posts.paginator.num_pages %}
+        <a href="{% url 'blog:list_of_posts' %}{{ posts.paginator.num_pages }}/">{{ posts.paginator.num_pages }} </a>|
+    {% endif %}
+<!-- end paginator --!>
+
+
+</div>
+{% endblock %}

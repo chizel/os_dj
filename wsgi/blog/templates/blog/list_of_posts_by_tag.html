@@ -1,0 +1,40 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}Blog's posts{% endblock %}
+
+{% block content %}
+<div class="content">
+<h2>Tag: {{tag.name}}</h2>
+<p><a href="{% url 'blog:list_of_posts' %}">Blog</a></p>
+{% if user.is_authenticated %}
+<p><a href="{% url 'blog:add_post' %}">Add post</a></p>
+{% endif %}
+
+{% for post in posts %}
+<p><a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+<script>document.write(moment("{{post.date|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
+Author: <a href="{{ post.user.get_absolute_url }}">{{ post.user.user.username }}</a>
+</p>
+{% endfor %}
+
+<!-- paginator --!>
+<div>
+    {% if posts.number > 1 %}
+        |<a href="{% url 'blog:show_tag' tag.name %}1/"> 1 </a>
+    {% endif %}
+    {% if posts.has_previous %}
+
+        |<a href="{% url 'blog:show_tag' tag.name %}{{ posts.previous_page_number}}/"> <<< </a>|
+    {% endif %}
+
+    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+    {% if posts.has_next %}
+        |<a href="{% url 'blog:show_tag' tag.name %}{{ posts.next_page_number}}/"> >>> </a>|
+    {% endif %}
+    {% if posts.next_page_number < posts.paginator.num_pages %}
+        <a href="{% url 'blog:show_tag' tag.name %}{{ posts.paginator.num_pages }}/">{{ posts.paginator.num_pages }} </a>|
+    {% endif %}
+
+
+</div>
+{% endblock %}

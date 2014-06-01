@@ -1,0 +1,22 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}Private messages{% endblock %}
+
+{% block content %}
+<div class="block_content">
+<br />
+Number of private messages: {{ pms|length }}.
+<br />
+Number of unread private messages: {{ pms.0.to_user.unread_pm }}.
+{% for pm in pms %}
+<div pm_link>
+    <a href="{% url 'userprofile:read_pm' pm.id %}">{{ pm.title }}</a> from 
+    <a href="{% url 'userprofile:profile' pm.from_user.id %}">{{ pm.from_user }}</a> | <script>document.write(moment("{{pm.sent|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script> | 
+    <a href="{% url 'userprofile:delete_pm' pm.id %}">delete</a>
+    {% if not pm.readed %}
+    <font color="red" size="-1">new!</font>
+    {% endif %}
+</div>
+{% endfor %}
+</div>
+{% endblock %}

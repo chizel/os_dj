@@ -1,0 +1,18 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}Private messages{% endblock %}
+
+{% block content %}
+<div class="block_content">
+
+<p><a href="{% url 'userprofile:show_pms' %}">Go back</a></p>
+<div id="private_message">
+<a href="{% url 'userprofile:profile' pm.from_user.id %}">{{ pm.from_user }}</a> <script>document.write(moment("{{pm.sent|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>:
+    <p>  {{ pm.message}} </p>
+<a href="{% url 'userprofile:show_pm_form' pm.from_user.id %}">answer</a>
+<br />
+<a href="{% url 'userprofile:delete_pm' pm.id %}">delete</a>
+</div>
+
+</div>
+{% endblock %}

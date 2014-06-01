@@ -5,7 +5,8 @@ import os
 # Put here required packages
 packages = [
     'Django<=1.6',
-    'python-auth-social'
+    'python-auth-social',
+    'django-annoying',
     ]
 
 if 'REDISCLOUD_URL' in os.environ and 'REDISCLOUD_PORT' in os.environ and 'REDISCLOUD_PASSWORD' in os.environ:

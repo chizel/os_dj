@@ -1,0 +1,45 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}{{ curr_user.username }}{% endblock %}
+
+{% block content %}
+<div class="block_content">
+
+<div class="profile_username">
+    <h2>{{ curr_user.username }} profile</h2>
+</div>
+
+<div class="profile_menu">
+{% if user.id == curr_user.id %}
+    <a href="{% url 'userprofile:edit_profile' %}">Edit profile</a>
+    <br />
+    <a href="{% url 'userprofile:show_pms' %}">Private messages</a>
+
+    {% if curr_user_profile.unread_pm %}
+        <font color="red" size="-1">({{ curr_user_profile.unread_pm }} new!)</font>
+    {% endif %}
+{% elif user.is_authenticated %}
+    <a href="{% url 'userprofile:show_pm_form' curr_user.id %}">Send private message</a>
+{% endif %}
+</div>
+
+<div class="user_info">
+<p>Username: {{ curr_user.username }}</p>
+<p>Last seen: <script>document.write(moment("{{curr_user.last_login|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script></p>
+<p>Registered: <script>document.write(moment("{{curr_user.date_joined|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script></p>
+<p>Number of messages: {{curr_user_profile.count_messages}}</p>
+
+{% if curr_user.firs_name %}
+    <p>Name: {{ curr_user.first_name }}</p>
+{% endif %}
+
+{% if curr_user.last_name %}
+    <p>Last name: {{ curr_user.last_name }}</p>
+{% endif %}
+
+{% if curr_user.firs_name %}
+    {{ curr_user.firs_name }}
+{% endif %}
+</div>
+</div>
+{% endblock %}
