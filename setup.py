@@ -5,7 +5,7 @@ import os
 # Put here required packages
 packages = [
     'Django<=1.6',
-    'python-auth-social',
+    'python-social-auth',
     'django-annoying',
     ]
 
