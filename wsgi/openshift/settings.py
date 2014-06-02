@@ -139,8 +139,8 @@ INSTALLED_APPS = (
 
 )
 
-ROOT_URLCONF = 'myforum.urls'
-WSGI_APPLICATION = 'myforum.wsgi.application'
+#ROOT_URLCONF = 'myforum.urls'
+#WSGI_APPLICATION = 'myforum.wsgi.application'
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 SOCIAL_AUTH_UID_LENGTH = 16
