@@ -45,17 +45,6 @@ if DEBUG:
 else:
      ALLOWED_HOSTS = ['*']
 
-# Application definition
-
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -126,3 +115,65 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static')
 STATIC_URL = '/static/'
+
+#MY_SETTINGS
+LOGIN_URL = '/forum/login/'
+APPEND_SLASH = True
+
+
+# Application definition
+
+INSTALLED_APPS = (
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    #my
+    'social.apps.django_app.default',
+    'forum',
+    'userprofile',
+    'blog',
+    'basesite',
+
+)
+
+ROOT_URLCONF = 'myforum.urls'
+WSGI_APPLICATION = 'myforum.wsgi.application'
+
+SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
+SOCIAL_AUTH_UID_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = 16
+SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
+ACCESS_TOKEN_METHOD = 'GET'
+
+AUTHENTICATION_BACKENDS = (
+  #'social.backends.google.GoogleOAuth2Backend',
+  'social.backends.github.GithubOAuth2',
+  'social.backends.open_id.OpenIdAuth',
+  'social.backends.google.GoogleOpenId',
+  'social.backends.google.GoogleOAuth2',
+  'social.backends.google.GoogleOAuth',
+  'social.backends.twitter.TwitterOAuth',
+  'social.backends.yahoo.YahooOpenId',
+  'django.contrib.auth.backends.ModelBackend',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
+    'django.contrib.auth.context_processors.auth',
+)
+
+#twitter
+SOCIAL_AUTH_TWITTER_KEY = 'ywIdQZ8GEcVPro2pMdAY7FRvy'
+SOCIAL_AUTH_TWITTER_SECRET = 'HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq'
+
+#github
+SOCIAL_AUTH_GITHUB_KEY = '418f1b0de987958ca56d'
+SOCIAL_AUTH_GITHUB_SECRET = '261db37446f05b88da1e5c0a915708491718aacc'
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'twitter', 'facebook', 'github')
