@@ -118,12 +118,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static')
 STATIC_URL = '/static/'
 
 #MY_SETTINGS
-LOGIN_URL = '/forum/login/'
+LOGIN_URL = '/user/login/'
 APPEND_SLASH = True
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
