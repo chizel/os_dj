@@ -12,7 +12,8 @@ from userprofile.models import UserProfile
 from models import BlogPost, BlogPostComment, Tag
 
 def list_of_posts(request, page=1):
-    posts_list = get_list_or_404(BlogPost)
+    posts_list = BlogPost.objects.all()
+    #get_list_or_404(BlogPost)
     paginator = Paginator(posts_list, 5)
     context = RequestContext(request)
 
