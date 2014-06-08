@@ -41,7 +41,7 @@ class UserProfile(models.Model):
         return '/user/%i/' % self.user.id
 
     def __unicode__(self):
-        return self.user.username
+        return "{0}".format(self.user.username)
 
 class PrivateMessage(models.Model):
     id = models.AutoField(primary_key=True)
@@ -57,7 +57,7 @@ class PrivateMessage(models.Model):
         self.save()
 
     def __unicode__(self):
-        return self.message
+        return "{0}".format(self.message)
 
     def __repr__(self):
         return '<PrivateMessage %r>' % (self.message)
