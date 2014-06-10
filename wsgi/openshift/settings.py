@@ -142,6 +142,17 @@ INSTALLED_APPS = (
 #ROOT_URLCONF = 'myforum.urls'
 #WSGI_APPLICATION = 'myforum.wsgi.application'
 
+#SOCIAL AUTHORIZATION
+SOCIAL_AUTH_PIPELINE = (
+'social_auth.backends.pipeline.social.social_auth_user',
+'social_auth.backends.pipeline.associate.associate_by_email',
+'social_auth.backends.pipeline.user.get_username',
+'social_auth.backends.pipeline.user.create_user',
+'social_auth.backends.pipeline.social.associate_user',
+'social_auth.backends.pipeline.user.update_user_details',
+'userprofile.pipelines.user_details',
+)
+
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
 SOCIAL_AUTH_UID_LENGTH = 16
 SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = 16
