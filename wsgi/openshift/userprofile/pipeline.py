@@ -1,5 +1,37 @@
-from userprofile.models import UserProfile, PrivateMessage
+from userprofile.models import UserProfile
 import datetime
+
+# User details pipeline
+def user_details(strategy, details, response, user=None, *args, **kwargs):
+    """Update user details using data from provider."""
+    if user:
+        if kwargs['is_new']:
+            attrs = {'user': user}
+
+            if strategy.backend.__class__.__name__ == 'TwitterOAuth':
+                #twitter_data = {}
+                #attrs = dict(attrs.items() + twitter_data.items())
+
+                #UserProfile.objects.create(
+                    #**attrs
+                #)
+                profile = UserProfile()
+                profile.user = user
+                profile.save()
+                return
+            elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
+                # We should check values before this, but for the example
+                # is fine
+                fb_data = {
+                'city': response['location']['name'],
+                'gender': response['gender'],
+                'locale': response['locale'],
+                'dob': datetime.fromtimestamp(mktime(strptime(response['birthday'], '%m/%d/%Y')))
+                }
+                attrs = dict(attrs.items() + fb_data.items())
+                UserProfile.objects.create(
+                **attrs
+                )
 
 def get_user_avatar(backend, details, response, social_user, uid, user, *args, **kwargs):
     url = None
@@ -18,36 +50,3 @@ def get_user_avatar(backend, details, response, social_user, uid, user, *args, *
         fout.close()
         profile.photo = url_to_image # depends on where you saved it
         profile.save()
-
-# User details pipeline
-def user_details(strategy, details, response, user=None, *args, **kwargs):
-    """Update user details using data from provider."""
-    if user:
-        # ...
-        # Just created the user?
-        if kwargs['is_new']:
-            attrs = {'user': user}
-            # I am using also Twitter backend, so I am checking if It's FB
-            # or Twitter. Might be a better way of doing this
-
-            if strategy.backend.__class__.__name__ == 'TwitterOAuth':
-                #twitter_data = {}
-                #attrs = dict(attrs.items() + twitter_data.items())
-
-                UserProfile.objects.create(
-                    **attrs
-                )
-                return
-            elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
-                # We should check values before this, but for the example
-                # is fine
-                fb_data = {
-                'city': response['location']['name'],
-                'gender': response['gender'],
-                'locale': response['locale'],
-                'dob': datetime.fromtimestamp(mktime(strptime(response['birthday'], '%m/%d/%Y')))
-                }
-                attrs = dict(attrs.items() + fb_data.items())
-                UserProfile.objects.create(
-                **attrs
-                )

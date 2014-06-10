@@ -152,7 +152,7 @@ SOCIAL_AUTH_PIPELINE = (
 'social.pipeline.user.create_user',
 'social.pipeline.social_auth.associate_user',
 'social.pipeline.social_auth.load_extra_data',
-'social.pipeline.user.user_details'
+'social.pipeline.user.user_details',
 'userprofile.pipeline.user_details',
 )
 
@@ -166,13 +166,14 @@ ACCESS_TOKEN_METHOD = 'GET'
 
 AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth2Backend',
-  'social.backends.github.GithubOAuth2',
-  'social.backends.open_id.OpenIdAuth',
-  'social.backends.google.GoogleOpenId',
-  'social.backends.google.GoogleOAuth2',
-  'social.backends.google.GoogleOAuth',
+#  'social.backends.github.GithubOAuth2',
+  #'social.backends.open_id.OpenIdAuth',
+  #'social.backends.google.GoogleOpenId',
+  #'social.backends.google.GoogleOAuth2',
+#  'social.backends.google.GoogleOAuth',
+  #'social.backends.yahoo.YahooOpenId',
+  'social.backends.facebook.FacebookOAuth2',
   'social.backends.twitter.TwitterOAuth',
-  'social.backends.yahoo.YahooOpenId',
   'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -189,5 +190,9 @@ SOCIAL_AUTH_TWITTER_SECRET = 'HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq
 #github
 SOCIAL_AUTH_GITHUB_KEY = '418f1b0de987958ca56d'
 SOCIAL_AUTH_GITHUB_SECRET = '261db37446f05b88da1e5c0a915708491718aacc'
+
+#facebook
+SOCIAL_AUTH_FACEBOOK_KEY = '1385525765034186'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'ca9e0b0c014909384c3d63336a9ea33e'
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'twitter', 'facebook', 'github')
