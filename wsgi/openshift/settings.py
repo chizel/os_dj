@@ -153,7 +153,7 @@ SOCIAL_AUTH_PIPELINE = (
 'social.pipeline.social_auth.associate_user',
 'social.pipeline.social_auth.load_extra_data',
 'social.pipeline.user.user_details'
-'userprofile.pipelines.user_details',
+'userprofile.pipeline.user_details',
 )
 
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'
