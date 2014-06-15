@@ -8,8 +8,7 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
         if is_new:
             attrs = {'user': user}
 
-            #if strategy.backend.__class__.__name__ == 'TwitterOAuth':
-            if backend.__class__ == TwitterBackend:
+            if strategy.backend.__class__.__name__ == 'TwitterOAuth':
                 #twitter_data = {}
                 #attrs = dict(attrs.items() + twitter_data.items())
 
@@ -22,8 +21,7 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
                 profile.save()
                 return
 
-            #elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
-            elif backend.__class__ == FacebookBackend:
+            elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
                 # We should check values before this, but for the example
                 # is fine
 #                fb_data = {
