@@ -8,6 +8,8 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
         if is_new:
             attrs = {'user': user}
 
+            return HttpResponse('uhuh')
+
             if strategy.backend.__class__.__name__ == 'TwitterOAuth':
                 #twitter_data = {}
                 #attrs = dict(attrs.items() + twitter_data.items())
