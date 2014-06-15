@@ -2,37 +2,44 @@ from userprofile.models import UserProfile
 import datetime
 
 # User details pipeline
-def user_details(strategy, details, response, user=None, *args, **kwargs):
+def user_details(strategy, details, response, is_new=False, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user:
-        if kwargs['is_new']:
+        if is_new:
             attrs = {'user': user}
 
-            if strategy.backend.__class__.__name__ == 'TwitterOAuth':
+            #if strategy.backend.__class__.__name__ == 'TwitterOAuth':
+            if backend.__class__ == TwitterBackend:
                 #twitter_data = {}
                 #attrs = dict(attrs.items() + twitter_data.items())
 
                 #UserProfile.objects.create(
                     #**attrs
                 #)
+
                 profile = UserProfile()
                 profile.user = user
                 profile.save()
                 return
-            elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
+
+            #elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
+            elif backend.__class__ == FacebookBackend:
                 # We should check values before this, but for the example
                 # is fine
-                fb_data = {
-                'city': response['location']['name'],
-                'gender': response['gender'],
-                'locale': response['locale'],
-                'dob': datetime.fromtimestamp(mktime(strptime(response['birthday'], '%m/%d/%Y')))
-                }
-                attrs = dict(attrs.items() + fb_data.items())
-                UserProfile.objects.create(
-                **attrs
-                )
-
+#                fb_data = {
+                #'city': response['location']['name'],
+                #'gender': response['gender'],
+                #'locale': response['locale'],
+                #'dob': datetime.fromtimestamp(mktime(strptime(response['birthday'], '%m/%d/%Y')))
+                #}
+                #attrs = dict(attrs.items() + fb_data.items())
+                #UserProfile.objects.create(
+                #**attrs
+                #)
+                profile = UserProfile()
+                profile.user = user
+                profile.save()
+  
 def get_user_avatar(backend, details, response, social_user, uid, user, *args, **kwargs):
     url = None
     if backend.__class__ == FacebookBackend:
