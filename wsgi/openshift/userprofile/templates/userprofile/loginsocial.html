@@ -4,20 +4,33 @@
 
 {% block content %}
 
+{% load staticfiles %}
 Chose social network where you have an account:
 <br>
-<img src="{% static "img/sociallogos/facebook.png" %}" alt="Facebook" />
-<a href="{% url 'social:begin' "facebook" %}" class="fb sn-logo">Facebook</a>
+<a href="{% url 'social:begin' "facebook" %}" class="fb sn-logo">
+    <img src="{% static "img/social/facebook.png" %}" width="64px" alt="Facebook" />
+    Facebook
+</a>
 <br />
-<a href="{% url 'social:begin' "twitter" %}" class="twitter sn-logo">Twitter</a>
+<a href="{% url 'social:begin' "twitter" %}" class="twitter sn-logo">
+    <img src="{% static "img/social/twitter.png" %}" width="64px" alt="Twitter" />
+    Twitter
+</a>
 <br />
-<a href="{% url 'social:begin' "google-oauth2" %}" class="google sn-logo">G+</a>
+<a href="{% url 'social:begin' "google-oauth2" %}" class="google sn-logo">
+    <img src="{% static "img/social/google_plus.png" %}" width="64px" alt="Google Plus" />
+    G+
+</a>
 <br />
-<a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+<a href="{% url 'social:begin' 'google-oauth2' %}">
+    <img src="{% static "img/social/google.png" %}" width="64px" alt="Google" />
+    Login with Google
+</a>
 <br />
-<a href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
-  
+<a href="{% url 'social:begin' 'github' %}">
+    <img src="{% static "img/social/github.png" %}" width="64px" alt="Github" />
+    Login with GitHub
+</a>
 <br />
-{{ user.userprofile.username }}
 
 {% endblock %}
