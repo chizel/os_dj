@@ -1,0 +1,23 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}Login via social networks{% endblock %}
+
+{% block content %}
+
+Chose social network where you have an account:
+<br>
+<img src="{% static "img/sociallogos/facebook.png" %}" alt="Facebook" />
+<a href="{% url 'social:begin' "facebook" %}" class="fb sn-logo">Facebook</a>
+<br />
+<a href="{% url 'social:begin' "twitter" %}" class="twitter sn-logo">Twitter</a>
+<br />
+<a href="{% url 'social:begin' "google-oauth2" %}" class="google sn-logo">G+</a>
+<br />
+<a href="{% url 'social:begin' 'google-oauth2' %}">Login with Google</a>
+<br />
+<a href="{% url 'social:begin' 'github' %}">Login with GitHub</a>
+  
+<br />
+{{ user.userprofile.username }}
+
+{% endblock %}

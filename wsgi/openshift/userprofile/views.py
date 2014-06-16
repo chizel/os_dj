@@ -10,49 +10,8 @@ from django.contrib.auth.models import User
 from userprofile.models import UserProfile, PrivateMessage
 from userprofile.forms import UserForm, UserProfileForm
 
-@login_required
-def user_profile_delete(request, user_id):
-    if not request.user.id == user_id:
-        message = 'You can\'t delete not your account!'
-        title = 'Error!'
-        return render_to_response(
-                'forum/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
-
-    logout(request)
-    message = 'Your account was deleted!'
-    title = 'Ok!'
-    return render_to_response(
-            'forum/notification.html',
-            {'title':title, 'message':message},
-            context
-            )
-
-@login_required
-def user_profile_edit(request):
-    context = RequestContext(request)
-
-    if request.method == 'POST':
-        pass
-    else:
-        return render_to_response('userprofile/edit_profile.html', {}, context) 
-
-def user_profile(request, user_id):
-    curr_user = get_object_or_404(User, pk=user_id)
-    curr_user_profile = get_object_or_404(UserProfile, pk=user_id)
-    context = RequestContext(request)
-    return render_to_response(
-            'userprofile/profile.html',
-            {'curr_user':curr_user, 'curr_user_profile':curr_user_profile},
-            context,
-            )
-
-@login_required
-def user_logout(request):
-    logout(request)
-    return redirect('/')
+def user_loginsocial(request):
+    return render_to_response('userprofile/loginsocial.html')
 
 def user_login(request):
     if request.user.is_authenticated():
@@ -78,7 +37,7 @@ def user_login(request):
                 message = 'Your account is disabled.'
                 title = 'Error!'
                 return render_to_response(
-                        'forum/notification.html',
+                        'basesite/notification.html',
                         {'title':title, 'message':message},
                         context
                         )
@@ -101,9 +60,14 @@ def user_login(request):
                 context
                 )
 
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect('/')
+
 def user_registration(request):
     if request.user.is_authenticated():
-        return redirect('forum:list_of_themes')
+        return redirect('/')
 
     context = RequestContext(request)
     registered = False
@@ -129,7 +93,46 @@ def user_registration(request):
                 'registered': registered
             },
             context)
-   
+ 
+def user_profile(request, user_id):
+    curr_user = get_object_or_404(User, pk=user_id)
+    curr_user_profile = get_object_or_404(UserProfile, pk=user_id)
+    context = RequestContext(request)
+    return render_to_response(
+            'userprofile/profile.html',
+            {'curr_user':curr_user, 'curr_user_profile':curr_user_profile},
+            context,
+            )
+
+@login_required
+def user_profile_edit(request):
+    context = RequestContext(request)
+
+    if request.method == 'POST':
+        pass
+    else:
+        return render_to_response('userprofile/edit_profile.html', {}, context) 
+
+@login_required
+def user_profile_delete(request, user_id):
+    if not request.user.id == user_id:
+        message = 'You can\'t delete not your account!'
+        title = 'Error!'
+        return render_to_response(
+                'forum/notification.html',
+                {'title':title, 'message':message},
+                context
+                )
+
+    logout(request)
+    message = 'Your account was deleted!'
+    title = 'Ok!'
+    return render_to_response(
+            'forum/notification.html',
+            {'title':title, 'message':message},
+            context
+            )
+  
 @login_required
 @require_GET
 def show_pm_form(request, to_user):
