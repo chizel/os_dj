@@ -167,7 +167,6 @@ ACCESS_TOKEN_METHOD = 'GET'
 
 AUTHENTICATION_BACKENDS = (
   #'social.backends.google.GoogleOAuth2Backend',
-#  'social.backends.github.GithubOAuth2',
   #'social.backends.open_id.OpenIdAuth',
   #'social.backends.google.GoogleOpenId',
   #'social.backends.google.GoogleOAuth2',
@@ -175,6 +174,7 @@ AUTHENTICATION_BACKENDS = (
   #'social.backends.yahoo.YahooOpenId',
   'social.backends.facebook.FacebookOAuth2',
   'social.backends.twitter.TwitterOAuth',
+  'social.backends.github.GithubOAuth2',
   'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -189,8 +189,8 @@ SOCIAL_AUTH_TWITTER_KEY = 'ywIdQZ8GEcVPro2pMdAY7FRvy'
 SOCIAL_AUTH_TWITTER_SECRET = 'HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq'
 
 #github
-SOCIAL_AUTH_GITHUB_KEY = '418f1b0de987958ca56d'
-SOCIAL_AUTH_GITHUB_SECRET = '261db37446f05b88da1e5c0a915708491718aacc'
+SOCIAL_AUTH_GITHUB_KEY = '    3d8997fed0e1aed2c8ffbb4a317886d3768191d0'
+SOCIAL_AUTH_GITHUB_SECRET = '620880ad2e92d0bde547'
 
 #facebook
 SOCIAL_AUTH_FACEBOOK_KEY = '1385525765034186'
