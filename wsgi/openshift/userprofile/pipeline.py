@@ -37,6 +37,11 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
                 profile = UserProfile()
                 profile.user = user
                 profile.save()
+            elif strategy.backend.__class__.__name__ == 'GithubOAuth2':
+                profile = UserProfile()
+                profile.user = user
+                profile.save()
+
   
 def get_user_avatar(backend, details, response, social_user, uid, user, *args, **kwargs):
     url = None
