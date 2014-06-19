@@ -24,6 +24,7 @@ def user_login(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 
+        #link to return user to the page from what he came
         if 'next' in request.POST:
             NEXT = request.POST['next']
         else:
