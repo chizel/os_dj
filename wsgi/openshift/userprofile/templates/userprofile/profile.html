@@ -9,6 +9,10 @@
     <h2>{{ curr_user.username }} profile</h2>
 </div>
 
+HERE<br />
+{{ curr_user_profile:picture }}
+<img src="{{ curr_user_profile:picture }}" />
+
 <div class="profile_menu">
 {% if user.id == curr_user.id %}
     <a href="{% url 'userprofile:edit_profile' %}">Edit profile</a>
