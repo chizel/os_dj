@@ -32,7 +32,7 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
   
 def get_user_avatar(strategy, details, response, social_user, uid, user, *args, **kwargs):
     #if not "id" in response:
-        return None
+        #return None
 
     url = None
 
