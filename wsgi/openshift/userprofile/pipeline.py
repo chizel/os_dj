@@ -9,8 +9,10 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
 
             #get special extra data
             if strategy.backend.__class__.__name__ == 'TwitterOAuth':
+                pass
                 #twitter_data = {}
             elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
+                pass
                 # We should check values before this, but for the example
                 # is fine
 #                fb_data = {
