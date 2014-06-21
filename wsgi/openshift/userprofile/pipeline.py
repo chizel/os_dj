@@ -7,6 +7,7 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
     if user:
         if is_new:
 
+            #get special extra data
             if strategy.backend.__class__.__name__ == 'TwitterOAuth':
                 #twitter_data = {}
             elif strategy.backend.__class__.__name__ == 'FacebookOAuth2':
@@ -20,12 +21,11 @@ def user_details(strategy, details, response, is_new=False, user=None, *args, **
                 #}
             elif strategy.backend.__class__.__name__ == 'GithubOAuth2':
                 pass
+
             profile = UserProfile()
             profile.user = user
             profile.picture = get_user_avatar()
             profile.save()
-        profile.picture = get_user_avatar()
-        profile.save()
 
   
 def get_user_avatar(strategy, details, response, social_user, uid, user, *args, **kwargs):
@@ -50,6 +50,7 @@ def get_user_avatar(strategy, details, response, social_user, uid, user, *args, 
         #fout.write(avatar)
         #fout.close()
         #profile.picture = url_to_image # depends on where you saved it
-        #profile.save()
-        return avatar
+        profile.picture = avatar
+        profile.save()
+        return 
     return None
