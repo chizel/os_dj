@@ -5,36 +5,12 @@
 {% block content %}
 <div class="block_content">
 
-<form id="user_form" method="post" action="{% url 'userprofile:registration' %}" enctype="multipart/form-data">
-{{ user_form.as_p }}
-{{ profile_form.as_p }}
-
-<input type="submit" name="submit" value="Register" />
-</form>
-{% endif %}
-
-
-    <h2>Edit {{ user_p.username }} profile</h2>
-
-    <p>Username: {{ user_p.username }}</p>
-    <p>Registered: {{ user_p.date_joined }}</p>
-
-    {% if user_p.firs_name %}
-    <p>Name: {{ user_p.first_name }}</p>
-    {% endif %}
-
-    {% if user_p.last_name %}
-    <p>Last name: {{ user_p.last_name }}</p>
-    {% endif %}
-    
-    {% if user_p.firs_name %}
-{   {% endif %}
-     <form action="{% url 'userprofile:edit_profile' %}" method="post">
+<form id="user_form" method="post"
+ action="{% url 'userprofile:edit_profile' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    <p><label for="id_post">Add post:</label></p>
-    <p><textarea name="email" cols="50" rows="10" id="id_post"></textarea></p>
-    <p><input type="hidden" name="theme_id" id="id_theme_id" value="{{ theme_id  }}" /></p>
-    <input type="submit" value="Send" />
-    </form>
+    {{ profile_form.as_p }}
+    <input type="submit" name="submit" value="Update profile" />
+</form>
+
 </div>
 {% endblock %}

@@ -11,6 +11,12 @@ class UserProfile(models.Model):
     picture = models.ImageField(upload_to='profile_images', blank=True)
     #about_me = models.CharField(max_lenght=300, blank=True)
 
+    #add accounts from social networks
+    #twitter_acc = models.
+    #fb_acc = models.
+    #google_acc = models.
+    #github_acc = models.
+
     #system fields
     count_messages = models.PositiveSmallIntegerField(default=0)
     unread_pm = models.PositiveSmallIntegerField(default=0)

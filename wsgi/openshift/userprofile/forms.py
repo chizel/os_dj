@@ -8,38 +8,97 @@ from userprofile.models import UserProfile, PrivateMessage
 #field_that_not_required = forms.BooleanField(required=False)
 
 class UserForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'class':'form-control',
-            'id':'username',
-            'placeholder':'Username',
-            }
-        ))
-
-    password = forms.CharField(widget=forms.PasswordInput(
-        attrs={
-            'class':'form-control',
-            'id':'password',
-            'placeholedr':'Password',
-            }
-        ))
-
-    email = forms.EmailField(widget=forms.EmailInput(
-        attrs={
-            'class':'form-control',
-            'id':'email',
-            'placeholder':'Email',
-            }
-        ))
-
     class Meta:
         model = User
         fields = ('username', 'email', 'password')
 
+    username = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'username',
+                    'placeholder':'Username',
+                    }
+                ),
+            )
+
+
+    password = forms.CharField(
+            widget=forms.PasswordInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'password',
+                    'placeholedr':'Password',
+                    }
+                ),
+            )
+
+    email = forms.EmailField(
+            widget=forms.EmailInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'email',
+                    'placeholder':'Email',
+                    }
+                ),
+            )
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture')
+        fields = ('email', 'about_me', 'website', 'picture')
+
+    #password = forms.CharField(widget=forms.PasswordInput(
+        #attrs={
+            #'class':'form-control',
+            #'id':'password',
+            #'placeholedr':'Password',
+            #}
+        #))
+
+    email = forms.EmailField(
+            widget=forms.EmailInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'email',
+                    'placeholder':'Email',
+                    }
+                ),
+            required=False
+            )
+
+    about_me = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'about_me',
+                    'placeholder':'Write something about you',
+                    }
+                ),
+            required=False,
+            )
+
+    website = forms.URLField(
+            widget=forms.URLInput(
+                attrs={
+                    'class':'form-control',
+                    'id':'website',
+                    'placeholder':'Your website',
+                    }
+                ),
+            required=False,
+            )
+     
+    picture = forms.ImageField(
+            widget=forms.FileInput(
+                attrs={
+                    #'class':'form-control',
+                    'id':'avatar',
+                    }
+                ),
+            required=False,
+            )
+
 
 #class PrivateMessageForm(forms.ModelForm):
     #message = forms.TextInput()
@@ -47,3 +106,4 @@ class UserProfileForm(forms.ModelForm):
     #class Meta:
         #model = PrivateMessage
 #        fields = ('message',)
+

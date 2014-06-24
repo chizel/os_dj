@@ -1,4 +1,5 @@
 # coding: utf-8
+import os
 
 from django.shortcuts import render, render_to_response, get_object_or_404, get_list_or_404, redirect
 from django.views.decorators.http import require_http_methods, require_GET, require_POST
@@ -9,6 +10,7 @@ from django.template import RequestContext, loader
 from django.contrib.auth.models import User
 from userprofile.models import UserProfile, PrivateMessage
 from userprofile.forms import UserForm, UserProfileForm
+from settings import MEDIA_ROOT
 
 def user_loginsocial(request):
     return render_to_response('userprofile/loginsocial.html')
@@ -109,10 +111,49 @@ def user_profile(request, user_id):
 def user_profile_edit(request):
     context = RequestContext(request)
 
+    profile_form = UserProfileForm
+
     if request.method == 'POST':
-        pass
+        update_profile = get_object_or_404(UserProfile, pk=request.user.id)
+
+        if 'email' in request.POST:
+#NEED!!! confirm new email
+            update_profile.user.email = request.POST['email']
+        if 'about_me' in request.POST:
+            update_profile.user.about_me = request.POST['about_me']
+        if 'website' in request.POST:
+            update_profile.website = request.POST['website']
+        if 'picture' in request.FILES:
+            #remove old picture
+            picture_name = str(request.user.id) + '.jpg'
+            picture_full_name = os.path.join(MEDIA_ROOT, picture_name)
+     #       if update_profile.picture:
+                #return HttpResponse(update_profile.picture)
+                #os.remove(picture_full_name)
+            #update_profile.picture = request.FILES['picture']
+            #with open(picture_full_name, 'w') as avatar:
+     #           avatar
+
+        update_profile.save()
+        title = "Profile update"
+        message = "Your profile have been succesfully updated!"
+
+        return render_to_response(
+                'basesite/notification.html',
+                {'title':title, 'message':message},
+                context
+                )
     else:
-        return render_to_response('userprofile/edit_profile.html', {}, context) 
+        return render_to_response('userprofile/edit_profile.html',
+                {
+                    'profile_form': profile_form,
+                },
+                context) 
+
+#def handle_uploaded_file(f):
+    #with open('some/file/name.txt', 'wb+') as destination:
+        #for chunk in f.chunks():
+        #    destination.write(chunk)
 
 @login_required
 def user_profile_delete(request, user_id):
@@ -120,7 +161,7 @@ def user_profile_delete(request, user_id):
         message = 'You can\'t delete not your account!'
         title = 'Error!'
         return render_to_response(
-                'forum/notification.html',
+                'basesite/notification.html',
                 {'title':title, 'message':message},
                 context
                 )
