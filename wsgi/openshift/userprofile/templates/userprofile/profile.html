@@ -9,7 +9,11 @@
     <h2>{{ curr_user.username }} profile</h2>
 </div>
 
-<img src="/media/{{ curr_user_profile.picture }}" />
+{% if curr_user_profile.avatar %}
+    <img src="/media/user_avatar/{{ curr_user_profile.id }}.jpg" />
+{% else %}
+    <img src="/media/user_avatar/default.png" />
+{% endif %}
 
 <div class="profile_menu">
 {% if user.id == curr_user.id %}

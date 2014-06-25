@@ -8,8 +8,8 @@ class UserProfile(models.Model):
 
     #user's data
     website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
-    #about_me = models.CharField(max_lenght=300, blank=True)
+    avatar = models.BooleanField(default=False)
+    about_me = models.CharField(max_length=300, blank=True)
 
     #add accounts from social networks
     #twitter_acc = models.

@@ -123,16 +123,17 @@ def user_profile_edit(request):
             update_profile.user.about_me = request.POST['about_me']
         if 'website' in request.POST:
             update_profile.website = request.POST['website']
-        if 'picture' in request.FILES:
+        if 'avatar' in request.FILES:
+            picture_name =  str(request.user.id) + '.jpg'
+            picture_full_name = os.path.join(MEDIA_ROOT, 'user_avatar', picture_name)
+
             #remove old picture
-            picture_name = str(request.user.id) + '.jpg'
-            picture_full_name = os.path.join(MEDIA_ROOT, picture_name)
-     #       if update_profile.picture:
-                #return HttpResponse(update_profile.picture)
+            #if update_profile.avatar:
                 #os.remove(picture_full_name)
-            #update_profile.picture = request.FILES['picture']
-            #with open(picture_full_name, 'w') as avatar:
-     #           avatar
+
+            from utils import resize_image
+            resize_image(request.FILES['avatar'], 160, picture_full_name)
+            update_profile.avatar = True
 
         update_profile.save()
         title = "Profile update"

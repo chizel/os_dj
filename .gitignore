@@ -1,5 +1,6 @@
 *.py[co]
 *.sw[po]
+*.sqlite3
 *.bak
 *.orig
 *~
@@ -11,3 +12,5 @@ venv/
 virtenv/
 dist/
 build/
+
+media/

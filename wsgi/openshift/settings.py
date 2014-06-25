@@ -17,14 +17,9 @@ if os.environ.has_key('OPENSHIFT_REPO_DIR'):
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'ascq#%bii8(tld52#(^*ht@pzq%=nyb7fdv+@ok$u^iwb@2hwh'
-
 default_keys = { 'SECRET_KEY': 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw' }
 use_keys = default_keys
+
 if ON_OPENSHIFT:
      imp.find_module('openshiftlibs')
      import openshiftlibs
@@ -32,7 +27,6 @@ if ON_OPENSHIFT:
 
 SECRET_KEY = use_keys['SECRET_KEY']
 
-# SECURITY WARNING: don't run with debug turned on in production!
 if ON_OPENSHIFT:
      #DEBUG = False
      DEBUG = True
@@ -98,29 +92,21 @@ else:
          }
     }
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
-USE_L10N = True
-
+USE_L10N = True 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #MY_SETTINGS
 LOGIN_URL = '/user/login/'
 APPEND_SLASH = True
-
 
 # Application definition
 INSTALLED_APPS = (
@@ -132,15 +118,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #my
     'social.apps.django_app.default',
+    'south',
     'forum',
     'userprofile',
     'blog',
     'basesite',
 
 )
-
-#ROOT_URLCONF = 'myforum.urls'
-#WSGI_APPLICATION = 'myforum.wsgi.application'
 
 #SOCIAL AUTHORIZATION
 SOCIAL_AUTH_PIPELINE = (
@@ -154,6 +138,7 @@ SOCIAL_AUTH_PIPELINE = (
 'social.pipeline.social_auth.load_extra_data',
 'social.pipeline.user.user_details',
 'userprofile.pipeline.user_details',
+'userprofile.pipeline.get_user_avatar',
 )
 
 LOGIN_REDIRECT_URL = '/'
@@ -189,8 +174,8 @@ SOCIAL_AUTH_TWITTER_KEY = 'ywIdQZ8GEcVPro2pMdAY7FRvy'
 SOCIAL_AUTH_TWITTER_SECRET = 'HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq'
 
 #github
-SOCIAL_AUTH_GITHUB_KEY = '3d8997fed0e1aed2c8ffbb4a317886d3768191d0'
-SOCIAL_AUTH_GITHUB_SECRET = '620880ad2e92d0bde547'
+SOCIAL_AUTH_GITHUB_KEY = '418f1b0de987958ca56d'
+SOCIAL_AUTH_GITHUB_SECRET = '261db37446f05b88da1e5c0a915708491718aacc'
 
 #facebook
 SOCIAL_AUTH_FACEBOOK_KEY = '1385525765034186'

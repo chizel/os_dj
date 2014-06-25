@@ -46,7 +46,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('email', 'about_me', 'website', 'picture')
+        fields = ('email', 'about_me', 'website', 'avatar')
 
     #password = forms.CharField(widget=forms.PasswordInput(
         #attrs={
@@ -89,7 +89,7 @@ class UserProfileForm(forms.ModelForm):
             required=False,
             )
      
-    picture = forms.ImageField(
+    avatar = forms.ImageField(
             widget=forms.FileInput(
                 attrs={
                     #'class':'form-control',

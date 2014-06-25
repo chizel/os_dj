@@ -11,7 +11,14 @@
 {% for post in posts%}
 <div class="forum_post">
     <div class="forum_user_info">
+
         <a href="{% url 'userprofile:profile' post.user.id %}">{{ post.user.user.username }}</a>
+        <br />
+        {% if post.user.avatar %}
+            <img src="/media/user_avatar/{{ post.user.id }}.jpg" />
+        {% else %}
+            <img src="/media/user_avatar/default.png" />
+        {% endif %}
         <p>Posts: {{ post.user.count_messages }}</p>
     </div> 
 
