@@ -7,12 +7,15 @@
 <div id="posts">
     <h1>{{ post.title }}</h1>
     {{ post.body }}
-    <p>Author: <a href="{{ post.user.get_absolute_url }}">{{ post.user.user.username }}</a></p>
-    {% if post.user.avatar %}
-        <img src="/media/user_avatar/{{ post.user.id }}.jpg" height="50px" />
-    {% else %}
-        <img src="/media/user_avatar/default.png" height="50px" />
-    {% endif %}
+    <p>
+        Author: 
+        {% if post.user.avatar %}
+            <img src="/media/user_avatar/{{ post.user.id }}.jpg" height="25px" />
+        {% else %}
+            <img src="/media/user_avatar/default.png" height="25px" />
+        {% endif %}
+        <a href="{{ post.user.get_absolute_url }}">{{ post.user.user.username }}</a>
+    </p>
 
 
     {% if post.tag.all %}
@@ -30,9 +33,9 @@
         {% for comment in comments.all %}
             <div id="comment">
             {% if comment.user.avatar %}
-                <img src="/media/user_avatar/{{ comment.user.id }}.jpg" height="50px" />
+                <img src="/media/user_avatar/{{ comment.user.id }}.jpg" height="25px" />
             {% else %}
-                <img src="/media/user_avatar/default.png" height="50px" />
+                <img src="/media/user_avatar/default.png" height="25px" />
             {% endif %}
 
             <a href="{{ comment.user.get_absolute_url }}">{{ comment.user.user.username }}</a>

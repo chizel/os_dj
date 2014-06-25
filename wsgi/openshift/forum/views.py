@@ -12,6 +12,28 @@ from django.db.models import F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
+
+class PostList(ListView):
+
+    model = Post
+
+    @method_decorator(login_required())
+    def dispatch(self, request, *args, **kwargs):
+        return super(PostList, self).dispatch(request, *args, **kwargs)
+
+class ThemesList(ListView):
+    model = Theme
+
+    template_name = 'forum/index.html'
+    context_object_name = 'themes'
+    paginate_by = 5
+
+    def get_queryset(self):
+        qs = Theme.objects.order_by('id')
+        return qs
+
 def list_of_themes(request):
     #!!! add pagination
     themes = Theme.objects.order_by('id')
