@@ -1,11 +1,12 @@
 {% extends 'basesite/index.html' %}
 
-{% block title %}{{ theme.name }}::Page {{posts.number}}{% endblock %}
+{% block title %}{{ theme.name }}::Page {{page_obj.current_page_number}}{% endblock %}
 
 {% block content %}
 
 <div class="forum_theme_name">
-    <h2><a href="{% url 'forum:list_of_themes' %}">Forum</a> > <a href="{% url 'forum:theme' theme.id %}">{{ theme.name }}</a></h2>
+    <h2><a href="{% url 'forum:list_of_themes' %}">Forum</a> ::
+    <a href="{% url 'forum:theme' theme.id %}">{{ theme.name }}</a></h2>
 </div>
 
 {% for post in posts%}
@@ -27,7 +28,7 @@
         <br />
         {{ post.post}}
 
-        {% if posts.number == posts.paginator.num_pages and forloop.last and post.user_id == user.id %}
+        {% if forloop.last and post.user_id == user.id and page_obj.number == page_obj.paginator.num_pages%}
             <a href="{% url 'forum:delete_post' post.id %}">delete</a>
         {% endif %}
     </div>
@@ -40,46 +41,56 @@
     <div class="forum_send_post_form">
 
 {% if user.is_authenticated %}
+<!-- ADD_POST FORM -->
 <form class="form-horizontal" role="form" method="post" action="{% url 'forum:add_post' %}">
-{% csrf_token %}
-<!-- POST-->
-<div class="form-group">
-    <label for="post" class="col-lg-2 control-label">Answer:</label>
-    <div class="col-lg-10">
-    <textarea name="post" cols="50" rows="5" class="input-xlarge"></textarea>
+    {% csrf_token %}
+    <!-- POST-->
+    <div class="form-group">
+        <label for="post" class="col-lg-2 control-label">Answer:</label>
+        <div class="col-lg-10">
+        <textarea name="post" cols="50" rows="5" class="input-xlarge"></textarea>
+        </div>
     </div>
-</div>
-<!-- SUBMIT_BUTTON -->
-<div class="form-group">
-    <div class="col-lg-offset-2 col-lg-10">
-    <button type="submit" class="btn btn-default">Submit</button>
+    <!-- SUBMIT_BUTTON -->
+    <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+        <button type="submit" class="btn btn-default">Submit</button>
+        </div>
     </div>
-</div>
-<input type="hidden" name="theme_id" value="{{theme.id}}" />
+    <input type="hidden" name="theme_id" value="{{theme.id}}" />
 </form>
 
 {% else %}
-<p><a href="{% url 'userprofile:login' %}">Login</a> or <a href="{% url 'userprofile:registration' %}">register</a> to add posts!</p>
+    <p><a href="{% url 'userprofile:login' %}">Login</a> or 
+    <a href="{% url 'userprofile:registration' %}">register</a> to add posts!</p>
 {% endif %}
 </div>
 </div>
 
-<!-- paginator --!>
-<div class="forum_pagination">
-    {% if posts.number > 1 %}
-        |<a href="{% url 'forum:theme' theme.id %}1/"> 1 </a>
-    {% endif %}
-    {% if posts.has_previous %}
+<!-- pagination --!>
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+           {% if page_obj.has_previous %}
+                {% if page_obj.previous_page_number > 1 %}
+                    |<a href="{% url 'forum:theme' theme.id %}"> 1 </a>
+                {% endif %}
 
-        |<a href="{% url 'forum:theme' theme.id %}{{ posts.previous_page_number}}/"> <<< </a>|
-    {% endif %}
+                |<a href="{% url 'forum:theme' theme.id page_obj.previous_page_number %}"> <<< </a>|
+            {% endif %}
 
-    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
-    {% if posts.has_next %}
-        |<a href="{% url 'forum:theme' theme.id %}{{ posts.next_page_number}}/"> >>> </a>|
-    {% endif %}
+            <span class="page-current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                |<a href="{% url 'forum:theme' theme.id page_obj.next_page_number %}"> >>> </a>|
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
     {% if posts.next_page_number < posts.paginator.num_pages %}
-        <a href="{% url 'forum:theme' theme.id %}{{ posts.paginator.num_pages }}/">{{ posts.paginator.num_pages }} </a>|
+        <a href="{% url 'forum:theme' theme.id posts.paginator.num_pages %}/">{{ posts.paginator.num_pages }} </a>|
     {% endif %}
 
 <form class="form-horizontal" role="form" method="get" action="{% url 'forum:theme' theme.id %}">
@@ -94,7 +105,6 @@
     <button type="submit" class="btn btn-default">Go</button>
 </div>
 </form>
-
 
 </div>
 {% endblock %}

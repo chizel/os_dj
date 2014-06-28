@@ -1,47 +1,46 @@
-from django.views.decorators.http import require_http_methods, require_GET, require_POST
+from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404, redirect
+from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, render_to_response, get_object_or_404, get_list_or_404, redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from django.template import RequestContext, loader
+from django.template import RequestContext
 from django.contrib.auth.models import User
-from forum.models import Branch, Theme, Post
-from userprofile.forms import UserForm, UserProfileForm
-from userprofile.models import UserProfile
 from django.db.models import F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 
+from forum.models import Branch, Theme, Post
+from userprofile.forms import UserForm, UserProfileForm
+from userprofile.models import UserProfile
+
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
-
-class PostList(ListView):
-
-    model = Post
-
-    @method_decorator(login_required())
-    def dispatch(self, request, *args, **kwargs):
-        return super(PostList, self).dispatch(request, *args, **kwargs)
+#@method_decorator(login_required())
 
 class ThemesList(ListView):
     model = Theme
-
     template_name = 'forum/index.html'
     context_object_name = 'themes'
     paginate_by = 5
 
-    def get_queryset(self):
-        qs = Theme.objects.order_by('id')
-        return qs
+    def get_object(self):
+        themes = Theme.objects.order_by('id')
+        return themes
 
-def list_of_themes(request):
-    #!!! add pagination
-    themes = Theme.objects.order_by('id')
-    return render(
-            request,
-            'forum/index.html',
-            {'themes': themes}
-            )
+class PostsList(ListView):
+    model = Post
+    template_name = 'forum/theme.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PostsList, self).get_context_data(**kwargs)
+        theme = get_object_or_404(Theme, pk=self.kwargs.get("theme_id"))
+        context['theme'] = theme
+        return context
+
+    def get_object(self):
+        return get_list_or_404(Post, theme_id=self.kwargs.get("theme_id"))
 
 @login_required
 def create_theme(request):
@@ -50,7 +49,6 @@ def create_theme(request):
         new_theme.author_id = request.user.id
         new_theme.name = request.POST['theme_name']
         new_theme.count_posts = 1
-        #!!!add branches!!!
         new_theme.branch_id = 1
         new_theme.save()
 
@@ -72,25 +70,6 @@ def create_theme(request):
                 {}
                 )
 
-def view_theme(request, theme_id, page=1):
-    posts_list = get_list_or_404(Post, theme_id=theme_id)
-    paginator = Paginator(posts_list, 5)
-
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-
-    theme = get_object_or_404(Theme, pk=theme_id)
-
-    return render(
-            request,
-            'forum/theme.html', 
-            {'posts': posts, 'theme': theme}
-            )
-
 @require_POST
 @login_required
 def add_post(request):
@@ -109,7 +88,11 @@ def add_post(request):
     #redirection to the last page
     posts_list = get_list_or_404(Post, theme_id=theme.id)
     paginator = Paginator(posts_list, 5)
-    url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
+    url = reverse(
+            'forum:theme',
+            args=[theme.id, paginator.num_pages,]
+            )
+    #url = reverse('forum:theme', args=[theme.id])
 
     return HttpResponseRedirect(url)
 
