@@ -1,0 +1,81 @@
+views.py:5:9: E126 continuation line over-indented for hanging indent
+views.py:7:9: E126 continuation line over-indented for hanging indent
+views.py:16:9: E126 continuation line over-indented for hanging indent
+views.py:19:1: E302 expected 2 blank lines, found 1
+views.py:22:1: E302 expected 2 blank lines, found 1
+views.py:33:9: E265 block comment should start with '# '
+views.py:38:1: W293 blank line contains whitespace
+views.py:47:25: E126 continuation line over-indented for hanging indent
+views.py:48:33: E231 missing whitespace after ':'
+views.py:48:50: E231 missing whitespace after ':'
+views.py:54:21: E126 continuation line over-indented for hanging indent
+views.py:55:28: E231 missing whitespace after ':'
+views.py:55:42: E231 missing whitespace after ':'
+views.py:66:17: E126 continuation line over-indented for hanging indent
+views.py:68:27: E231 missing whitespace after ':'
+views.py:69:27: E231 missing whitespace after ':'
+views.py:74:1: E302 expected 2 blank lines, found 1
+views.py:79:1: E302 expected 2 blank lines, found 1
+views.py:101:13: E126 continuation line over-indented for hanging indent
+views.py:107:1: W293 blank line contains whitespace
+views.py:108:1: E302 expected 2 blank lines, found 1
+views.py:113:13: E126 continuation line over-indented for hanging indent
+views.py:114:25: E231 missing whitespace after ':'
+views.py:114:56: E231 missing whitespace after ':'
+views.py:118:1: E302 expected 2 blank lines, found 1
+views.py:128:1: E112 expected an indented block
+views.py:128:1: E265 block comment should start with '# '
+views.py:135:27: E222 multiple spaces after operator
+views.py:136:80: E501 line too long (85 > 79 characters)
+views.py:138:13: E265 block comment should start with '# '
+views.py:139:13: E265 block comment should start with '# '
+views.py:140:17: E113 unexpected indentation
+views.py:140:17: E265 block comment should start with '# '
+views.py:151:17: E126 continuation line over-indented for hanging indent
+views.py:152:25: E231 missing whitespace after ':'
+views.py:152:42: E231 missing whitespace after ':'
+views.py:157:17: E128 continuation line under-indented for visual indent
+views.py:160:17: E126 continuation line over-indented for hanging indent
+views.py:160:25: W291 trailing whitespace
+views.py:162:1: E265 block comment should start with '# '
+views.py:163:5: E265 block comment should start with '# '
+views.py:164:9: E265 block comment should start with '# '
+views.py:167:1: E302 expected 2 blank lines, found 1
+views.py:173:17: E126 continuation line over-indented for hanging indent
+views.py:174:25: E231 missing whitespace after ':'
+views.py:174:42: E231 missing whitespace after ':'
+views.py:182:13: E126 continuation line over-indented for hanging indent
+views.py:183:21: E231 missing whitespace after ':'
+views.py:183:38: E231 missing whitespace after ':'
+views.py:186:1: W293 blank line contains whitespace
+views.py:187:1: E302 expected 2 blank lines, found 1
+views.py:193:13: E126 continuation line over-indented for hanging indent
+views.py:194:23: E231 missing whitespace after ':'
+views.py:194:28: E231 missing whitespace after ','
+views.py:196:14: W291 trailing whitespace
+views.py:206:8: E713 test for membership should be 'not in'
+views.py:208:10: E713 test for membership should be 'not in'
+views.py:210:10: E713 test for membership should be 'not in'
+views.py:224:13: E126 continuation line over-indented for hanging indent
+views.py:225:21: E231 missing whitespace after ':'
+views.py:225:38: E231 missing whitespace after ':'
+views.py:229:1: E302 expected 2 blank lines, found 1
+views.py:231:1: E112 expected an indented block
+views.py:231:1: E265 block comment should start with '# '
+views.py:232:5: E265 block comment should start with '# '
+views.py:239:17: E126 continuation line over-indented for hanging indent
+views.py:240:27: E231 missing whitespace after ':'
+views.py:245:13: E126 continuation line over-indented for hanging indent
+views.py:246:19: E231 missing whitespace after ':'
+views.py:250:1: W293 blank line contains whitespace
+views.py:260:17: E126 continuation line over-indented for hanging indent
+views.py:261:25: E231 missing whitespace after ':'
+views.py:261:42: E231 missing whitespace after ':'
+views.py:270:5: E303 too many blank lines (2)
+views.py:271:13: E126 continuation line over-indented for hanging indent
+views.py:272:18: E231 missing whitespace after ':'
+views.py:276:1: E302 expected 2 blank lines, found 1
+views.py:281:59: W291 trailing whitespace
+views.py:285:17: E126 continuation line over-indented for hanging indent
+views.py:286:25: E231 missing whitespace after ':'
+views.py:286:42: E231 missing whitespace after ':'

@@ -109,27 +109,25 @@ def user_profile(request, user_id):
 def user_profile_edit(request):
     context = RequestContext(request)
 
-    profile_form = EditProfileForm
-
     if request.method == 'POST':
         update_profile = get_object_or_404(UserProfile, pk=request.user.id)
+        form = EditProfileForm(request.POST, instance=update_profile)
 
-        if 'email' in request.POST:
-            update_profile.user.email = request.POST['email']
-        if 'about_me' in request.POST:
-            update_profile.user.about_me = request.POST['about_me']
-        if 'website' in request.POST:
-            update_profile.website = request.POST['website']
-        if 'avatar' in request.FILES:
-            picture_name = str(request.user.id) + '.jpg'
-            picture_full_name = os.path.join(MEDIA_ROOT,
-                                             'user_avatar',
-                                             picture_name)
+        if form.is_valid():
+            form.save(commit=True)
 
-            resize_image(request.FILES['avatar'], 160, picture_full_name)
-            update_profile.avatar = True
+            if 'avatar' in request.FILES:
+                picture_name = str(request.user.id) + '.jpg'
+                picture_full_name = os.path.join(MEDIA_ROOT,
+                                                 'user_avatar',
+                                                 picture_name)
+                update_profile.avatar = True
+                update_profile.save()
+                return HttpResponse('hs')
 
-        update_profile.save()
+        # if 'email' in request.POST:
+            # update_profile.user.email = request.POST['email']
+
         title = "Profile update"
         message = "Your profile have been succesfully updated!"
 
@@ -137,8 +135,9 @@ def user_profile_edit(request):
                                   {'title': title, 'message': message},
                                   context)
     else:
+        form = EditProfileForm()
         return render_to_response('userprofile/edit_profile.html',
-                                  {'profile_form': profile_form},
+                                  {'form': form},
                                   context)
 
 

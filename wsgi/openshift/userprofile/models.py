@@ -3,21 +3,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
-    #user's data
+    # user's data
     website = models.URLField(blank=True)
     avatar = models.BooleanField(default=False)
     about_me = models.CharField(max_length=300, blank=True)
 
-    #add accounts from social networks
-    #twitter_acc = models.
-    #fb_acc = models.
-    #google_acc = models.
-    #github_acc = models.
-
-    #system fields
+    # system fields
     count_messages = models.PositiveSmallIntegerField(default=0)
     unread_pm = models.PositiveSmallIntegerField(default=0)
 
@@ -48,6 +43,7 @@ class UserProfile(models.Model):
 
     def __unicode__(self):
         return "{0}".format(self.user.username)
+
 
 class PrivateMessage(models.Model):
     id = models.AutoField(primary_key=True)
