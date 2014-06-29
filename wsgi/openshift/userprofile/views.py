@@ -1,19 +1,25 @@
 # coding: utf-8
 import os
+from utils import resize_image
 
-from django.shortcuts import render, render_to_response, get_object_or_404, get_list_or_404, redirect
-from django.views.decorators.http import require_http_methods, require_GET, require_POST
+from django.shortcuts import redirect, render_to_response
+from django.shortcuts import get_list_or_404, get_object_or_404
+from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext, loader
 from django.contrib.auth.models import User
+
 from userprofile.models import UserProfile, PrivateMessage
-from userprofile.forms import UserForm, UserProfileForm
+from userprofile.forms import RegisterForm, EditProfileForm
+from userprofile.forms import PrivateMessageForm, LoginForm
 from settings import MEDIA_ROOT
+
 
 def user_loginsocial(request):
     return render_to_response('userprofile/loginsocial.html')
+
 
 def user_login(request):
     if request.user.is_authenticated():
@@ -26,12 +32,12 @@ def user_login(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 
-        #link to return user to the page from what he came
+        # link to return user to the page from what he came
         if 'next' in request.POST:
             NEXT = request.POST['next']
         else:
             NEXT = '/'
-               
+
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -39,34 +45,31 @@ def user_login(request):
             else:
                 message = 'Your account is disabled.'
                 title = 'Error!'
-                return render_to_response(
-                        'basesite/notification.html',
-                        {'title':title, 'message':message},
-                        context
-                        )
+                return render_to_response('basesite/notification.html',
+                                          {'title': title, 'message': message},
+                                          context)
         else:
             error = "Invalid login details supplied."
-            return render_to_response(
-                    'userprofile/login.html',
-                    {'next':NEXT, 'error':error},
-                    context
-                    )
+            return render_to_response('userprofile/login.html',
+                                      {'next': NEXT, 'error': error},
+                                      context)
     else:
         if 'next' in request.GET:
             NEXT = request.GET['next']
         else:
             NEXT = None
+        form = LoginForm()
 
-        return render_to_response(
-                'userprofile/login.html',
-                {'next':NEXT},
-                context
-                )
+        return render_to_response('userprofile/login.html',
+                                  {'next': NEXT, 'form': form},
+                                  context)
+
 
 @login_required
 def user_logout(request):
     logout(request)
     return redirect('/')
+
 
 def user_registration(request):
     if request.user.is_authenticated():
@@ -87,51 +90,42 @@ def user_registration(request):
             profile.save()
             registered = True
     else:
-        user_form = UserForm()
+        form = RegisterForm()
 
-    return render_to_response(
-            'userprofile/registration.html',
-            {
-                'user_form': user_form,
-                'registered': registered
-            },
-            context)
- 
+    return render_to_response('userprofile/registration.html',
+                              {'form': form, 'registered': registered},
+                              context)
+
+
 def user_profile(request, user_id):
-    curr_user = get_object_or_404(User, pk=user_id)
-    curr_user_profile = get_object_or_404(UserProfile, pk=user_id)
+    user_profile = get_object_or_404(UserProfile, pk=user_id)
     context = RequestContext(request)
-    return render_to_response(
-            'userprofile/profile.html',
-            {'curr_user':curr_user, 'curr_user_profile':curr_user_profile},
-            context,
-            )
+    return render_to_response('userprofile/profile.html',
+                              {'user_profile': user_profile},
+                              context,)
+
 
 @login_required
 def user_profile_edit(request):
     context = RequestContext(request)
 
-    profile_form = UserProfileForm
+    profile_form = EditProfileForm
 
     if request.method == 'POST':
         update_profile = get_object_or_404(UserProfile, pk=request.user.id)
 
         if 'email' in request.POST:
-#NEED!!! confirm new email
             update_profile.user.email = request.POST['email']
         if 'about_me' in request.POST:
             update_profile.user.about_me = request.POST['about_me']
         if 'website' in request.POST:
             update_profile.website = request.POST['website']
         if 'avatar' in request.FILES:
-            picture_name =  str(request.user.id) + '.jpg'
-            picture_full_name = os.path.join(MEDIA_ROOT, 'user_avatar', picture_name)
+            picture_name = str(request.user.id) + '.jpg'
+            picture_full_name = os.path.join(MEDIA_ROOT,
+                                             'user_avatar',
+                                             picture_name)
 
-            #remove old picture
-            #if update_profile.avatar:
-                #os.remove(picture_full_name)
-
-            from utils import resize_image
             resize_image(request.FILES['avatar'], 160, picture_full_name)
             update_profile.avatar = True
 
@@ -139,53 +133,40 @@ def user_profile_edit(request):
         title = "Profile update"
         message = "Your profile have been succesfully updated!"
 
-        return render_to_response(
-                'basesite/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
+        return render_to_response('basesite/notification.html',
+                                  {'title': title, 'message': message},
+                                  context)
     else:
         return render_to_response('userprofile/edit_profile.html',
-                {
-                    'profile_form': profile_form,
-                },
-                context) 
+                                  {'profile_form': profile_form},
+                                  context)
 
-#def handle_uploaded_file(f):
-    #with open('some/file/name.txt', 'wb+') as destination:
-        #for chunk in f.chunks():
-        #    destination.write(chunk)
 
 @login_required
 def user_profile_delete(request, user_id):
     if not request.user.id == user_id:
         message = 'You can\'t delete not your account!'
         title = 'Error!'
-        return render_to_response(
-                'basesite/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
+        return render_to_response('basesite/notification.html',
+                                  {'title': title, 'message': message},
+                                  context)
 
     logout(request)
     message = 'Your account was deleted!'
     title = 'Ok!'
-    return render_to_response(
-            'forum/notification.html',
-            {'title':title, 'message':message},
-            context
-            )
-  
+    return render_to_response('basesite/notification.html',
+                              {'title': title, 'message': message},
+                              context)
+
+
 @login_required
 @require_GET
 def show_pm_form(request, to_user):
     user = get_object_or_404(User, pk=to_user)
     context = RequestContext(request, {})
-    return render_to_response(
-            'userprofile/send_pm.html',
-            {'to_user':user,},
-            context,
-            ) 
+    return render_to_response('userprofile/send_pm.html',
+                              {'to_user': user},
+                              context)
 
 
 @login_required
@@ -195,11 +176,11 @@ def send_pm(request):
     pm = PrivateMessage()
     title = 'Error!'
 
-    if not 'to_user' in request.POST or not int(request.POST['to_user']):
+    if 'to_user' not in request.POST or not int(request.POST['to_user']):
         message = 'Wrong user!'
-    elif not 'message' in request.POST or request.POST['message'] == '':
+    elif 'message' not in request.POST or request.POST['message'] == '':
         message = 'Wrong message!'
-    elif not 'title' in request.POST or request.POST['title'] == '':
+    elif 'title' not in request.POST or request.POST['title'] == '':
         message = 'Wrong title!'
     else:
         pm.message = request.POST['message']
@@ -212,34 +193,28 @@ def send_pm(request):
         message = 'Your message have been sent!'
         title = 'Ok!'
 
-    return render_to_response(
-            'forum/notification.html',
-            {'title':title, 'message':message},
-            context
-            )
+    return render_to_response('basesite/notification.html',
+                              {'title': title, 'message': message},
+                              context)
+
 
 @login_required
 def show_pms(request):
-#!!! add pagination
-    #pms = get_list_or_404(PrivateMessage, to_user_id=request.user.id)
+    # pms = get_list_or_404(PrivateMessage, to_user_id=request.user.id)
     context = RequestContext(request)
     pms = PrivateMessage.objects.filter(to_user_id=request.user.id)
 
     if not pms:
         message = 'You haven\'t any private messages!'
-        return render_to_response(
-                'forum/notification.html',
-                {'message':message},
-                context
-                )
+        return render_to_response('basesite/notification.html',
+                                  {'message': message},
+                                  context)
 
-    return render_to_response(
-            'userprofile/show_pms.html',
-            {'pms':pms},
-            context
-            )
+    return render_to_response('userprofile/show_pms.html',
+                              {'pms': pms},
+                              context)
 
- 
+
 @login_required
 def read_pm(request, pm_id):
     pm = get_object_or_404(PrivateMessage, pk=pm_id)
@@ -248,37 +223,30 @@ def read_pm(request, pm_id):
     if not pm.to_user.id == request.user.id:
         message = 'Error! You can\'t read this message!'
         title = 'Error!'
-        return render_to_response(
-                'forum/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
+        return render_to_response('basesite/notification.html',
+                                  {'title': title, 'message': message},
+                                  context)
 
     if not pm.readed:
         pm.set_readed()
         pm.to_user.decrement_unread_pm()
 
+    return render_to_response('userprofile/read_pm.html',
+                              {'pm': pm},
+                              context)
 
-    return render_to_response(
-            'userprofile/read_pm.html',
-            {'pm':pm},
-            context
-            )
 
 @login_required
 def delete_pm(request, pm_id):
     pm = get_object_or_404(PrivateMessage, pk=pm_id)
 
     if not pm.to_user.id == request.user.id:
-        message = 'Error! You can\'t delete this message!' 
+        message = 'Error! You can\'t delete this message!'
         title = 'Error!'
         context = RequestContext(request)
-        return render_to_response(
-                'forum/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
-
+        return render_to_response('basesite/notification.html',
+                                  {'title': title, 'message': message},
+                                  context)
     pm.delete()
     pm.to_user.decrement_unread_pm()
 
