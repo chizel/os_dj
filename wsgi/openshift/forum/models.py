@@ -3,10 +3,10 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from userprofile.models import UserProfile
 
+
 class Branch(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=120)
-    #last_theme = models.ForeignKey(Theme, related_name='_last_theme')
     count_themes = models.IntegerField(default=0)
 
     def delete_branch(self, id):
@@ -14,6 +14,7 @@ class Branch(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Theme(models.Model):
     id = models.AutoField(primary_key=True)
@@ -49,7 +50,7 @@ class Theme(models.Model):
         self.last_author = posts[0].user.id
         self.last_post = posts[0].created
         self.count_posts = 1
-    
+
     def close_theme(self, id):
         self.closed = True
         self.save()
@@ -58,23 +59,22 @@ class Theme(models.Model):
         return self.name
 
 
-
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
     theme = models.ForeignKey(Theme, related_name='_theme_id')
-    post = models.CharField(max_length=120)
+    post = models.CharField(max_length=3000)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
     user = models.ForeignKey(UserProfile, related_name='_user_id')
 
     def delete_post(self, id):
-#decrement number of messages post's user and theme
+        # decrement number of messages post's user and theme
         self.user.decrement_count_messages()
-        #self.delete()
+        # self.delete()
         pass
 
     def edit_post(self, id):
-#        if post.user_id == user.id:
+        # if post.user_id == user.id:
         pass
 
     def __unicode__(self):

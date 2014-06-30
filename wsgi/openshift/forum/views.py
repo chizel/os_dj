@@ -1,4 +1,5 @@
-from django.shortcuts import render_to_response, get_object_or_404, get_list_or_404, redirect
+from django.shortcuts import redirect, render_to_response
+from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -8,15 +9,14 @@ from django.contrib.auth.models import User
 from django.db.models import F
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-
-from forum.models import Branch, Theme, Post
-from userprofile.forms import UserForm, UserProfileForm
-from userprofile.models import UserProfile
-
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
-#@method_decorator(login_required())
 
+from forum.models import Branch, Theme, Post
+from userprofile.models import UserProfile
+
+
+# @method_decorator(login_required())
 class ThemesList(ListView):
     model = Theme
     template_name = 'forum/index.html'
@@ -27,6 +27,7 @@ class ThemesList(ListView):
         themes = Theme.objects.order_by('id')
         return themes
 
+
 class PostsList(ListView):
     model = Post
     template_name = 'forum/theme.html'
@@ -35,20 +36,23 @@ class PostsList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(PostsList, self).get_context_data(**kwargs)
-        theme = get_object_or_404(Theme, pk=self.kwargs.get("theme_id"))
-        context['theme'] = theme
+        context['theme'] = get_object_or_404(
+            Theme,
+            pk=self.kwargs.get("theme_id")
+            )
         return context
 
-    def get_object(self):
+    def get_queryset(self):
         return get_list_or_404(Post, theme_id=self.kwargs.get("theme_id"))
+
 
 @login_required
 def create_theme(request):
-    if request.method == 'POST' and 'theme_name' in request.POST and 'first_post' in request.POST:
+    if request.method == 'POST' and 'theme_name' in request.POST and
+    'first_post' in request.POST:
         new_theme = Theme()
         new_theme.author_id = request.user.id
         new_theme.name = request.POST['theme_name']
-        new_theme.count_posts = 1
         new_theme.branch_id = 1
         new_theme.save()
 
@@ -56,45 +60,39 @@ def create_theme(request):
         new_post.theme_id = new_theme.id
         new_post.post = request.POST['first_post']
         new_post.user_id = request.user.id
-        UserProfile.objects.filter(pk=request.user.id).update(count_messages=F('count_messages')+1)
-        #new_post.save()
-        #return HttpResponseRedirect(reverse('forum:theme' 
-        #url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
+        UserProfile.objects.filter(pk=request.user.id).update(
+            count_messages=F('count_messages')+1)
+        # new_post.save()
+        # return HttpResponseRedirect(reverse('forum:theme'
+        # url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
         return HttpResponse(str(new_theme.id))
-     
+
     else:
-        #show creation form
-        return render(
-                request,
-                'forum/create_theme.html',
-                {}
-                )
+        return render(request, 'forum/create_theme.html', {})
+
 
 @require_POST
 @login_required
 def add_post(request):
-    if not 'post' in request.POST or not request.POST['post'].strip():
+    if 'post' not in request.POST or not request.POST['post'].strip():
         return redirect(reverse('blog:list_of_posts'))
 
-    theme = get_object_or_404(Theme, pk=request.POST['theme_id']) 
+    theme = get_object_or_404(Theme, pk=request.POST['theme_id'])
     new_post = Post()
     new_post.theme_id = theme.id
     new_post.post = request.POST['post']
     new_post.user_id = request.user.id
-    UserProfile.objects.filter(pk=request.user.id).update(count_messages=F('count_messages')+1)
+    UserProfile.objects.filter(pk=request.user.id).update(
+        count_messages=F('count_messages')+1)
     new_post.save()
     theme.increment_count_posts()
 
-    #redirection to the last page
+    # redirection to the last page
     posts_list = get_list_or_404(Post, theme_id=theme.id)
     paginator = Paginator(posts_list, 5)
-    url = reverse(
-            'forum:theme',
-            args=[theme.id, paginator.num_pages,]
-            )
-    #url = reverse('forum:theme', args=[theme.id])
-
+    url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
     return HttpResponseRedirect(url)
+
 
 @require_GET
 @login_required
@@ -108,27 +106,28 @@ def delete_post(request, post_id):
         message = 'Error! Your post is not the last!'
         title = 'Error!'
         return render_to_response(
-                'forum/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
+            'forum/notification.html',
+            {'title': title, 'message': message},
+            context
+            )
 
     theme = get_object_or_404(Theme, pk=theme_id)
-    
+
     if not post.user_id == request.user.id:
         message = 'Error! You can delete only your messages!'
         title = 'Error!'
         return render_to_response(
-                'forum/notification.html',
-                {'title':title, 'message':message},
-                context
-                )
+            'forum/notification.html',
+            {'title': title, 'message': message},
+            context
+            )
 
     Post.objects.filter(pk=post_id).delete()
-    UserProfile.objects.filter(pk=request.user.id).update(count_messages=F('count_messages')-1)
+    UserProfile.objects.filter(pk=request.user.id).update(
+        count_messages=F('count_messages')-1)
     theme.decrement_count_posts()
 
-    #redirection to the last page
+    # redirection to the last page
     posts_list = get_list_or_404(Post, theme_id=theme_id)
     paginator = Paginator(posts_list, 5)
     url = reverse('forum:theme', args=[theme_id, paginator.num_pages])
