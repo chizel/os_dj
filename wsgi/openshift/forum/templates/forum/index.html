@@ -8,7 +8,7 @@
     <ul>
     {% for theme in themes%}
     <li>
-    <a href="/forum/{{ theme.id }}/">{{ theme.name}}</a>
+    <a href="{% url 'forum:theme' theme.id %}">{{ theme.name}}</a>
     | Created: <script>document.write(moment("{{theme.created|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
     | Number of posts: {{theme.count_posts}}
     | Author: <a href="{% url 'userprofile:profile' theme.user.id %}">{{theme.author}}</a> |

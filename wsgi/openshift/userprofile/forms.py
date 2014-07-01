@@ -69,7 +69,7 @@ class LoginForm(forms.ModelForm):
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('email', 'about_me', 'website', 'avatar')
+        fields = ('email', 'about_me', 'website')
 
     password = forms.CharField(
         widget=forms.PasswordInput(
@@ -115,10 +115,10 @@ class EditProfileForm(forms.ModelForm):
         required=False,
         )
 
-    avatar = forms.ImageField(
+    new_avatar = forms.ImageField(
         widget=forms.FileInput(
             attrs={
-                'id': 'avatar',
+                'id': 'new_avatar',
                 }
             ),
         required=False,

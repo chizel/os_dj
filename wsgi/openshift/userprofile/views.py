@@ -1,6 +1,5 @@
 # coding: utf-8
 import os
-from utils import resize_image
 
 from django.shortcuts import redirect, render_to_response
 from django.shortcuts import get_list_or_404, get_object_or_404
@@ -14,6 +13,7 @@ from django.contrib.auth.models import User
 from userprofile.models import UserProfile, PrivateMessage
 from userprofile.forms import RegisterForm, EditProfileForm
 from userprofile.forms import PrivateMessageForm, LoginForm
+from userprofile.utils import resize_image
 from settings import MEDIA_ROOT
 
 
@@ -49,7 +49,7 @@ def user_login(request):
                                           {'title': title, 'message': message},
                                           context)
         else:
-            error = "Invalid login details supplied."
+            error = 'Invalid login details supplied.'
             return render_to_response('userprofile/login.html',
                                       {'next': NEXT, 'error': error},
                                       context)
@@ -115,21 +115,29 @@ def user_profile_edit(request):
 
         if form.is_valid():
             form.save(commit=True)
+            title = 'Profile update'
+            message = 'Your profile have been succesfully updated!'
 
-            if 'avatar' in request.FILES:
+            if 'new_avatar' in request.FILES:
                 picture_name = str(request.user.id) + '.jpg'
-                picture_full_name = os.path.join(MEDIA_ROOT,
-                                                 'user_avatar',
-                                                 picture_name)
-                update_profile.avatar = True
-                update_profile.save()
-                return HttpResponse('hs')
+                picture_full_name = os.path.join(
+                    MEDIA_ROOT,
+                    'user_avatar',
+                    picture_name)
 
-        # if 'email' in request.POST:
-            # update_profile.user.email = request.POST['email']
+                if resize_image(request.FILES['new_avatar'],
+                                picture_full_name, 160):
+                    update_profile.avatar = True
+                    update_profile.save()
+                else:
+                    title = 'Error!'
+                    message = 'Incorrect image! Please select other image!'
 
-        title = "Profile update"
-        message = "Your profile have been succesfully updated!"
+            # if 'email' in request.POST:
+                # update_profile.user.email = request.POST['email']
+        else:
+            title = 'Error!'
+            message = 'Wrong data!'
 
         return render_to_response('basesite/notification.html',
                                   {'title': title, 'message': message},

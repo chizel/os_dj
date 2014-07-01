@@ -14,16 +14,22 @@ def scale_dimensions(width, height, longest_side):
     return (width, height)
 
 
-def resize_image(image, max_length, full_path):
+def resize_image(image, full_path, max_length):
     '''resize image longest side to max_length px, other side resize by scale
         full_path must contain full path to image and image name + extenshion
         '''
 
     image = StringIO.StringIO(image.read())
-    image = Image.open(image)
+
+    try: 
+        image = Image.open(image)
+    except:
+        return None
+
     (width, height) = image.size
     (width, height) = scale_dimensions(width, height, longest_side=160)
 
     image = image.resize((width, height), Image.ANTIALIAS)
     image_file = StringIO.StringIO()
     image.save(full_path, 'JPEG', quality=70)
+    return True

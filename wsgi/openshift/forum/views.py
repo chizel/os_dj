@@ -48,8 +48,8 @@ class PostsList(ListView):
 
 @login_required
 def create_theme(request):
-    if request.method == 'POST' and 'theme_name' in request.POST and
-    'first_post' in request.POST:
+    if request.method == 'POST' and 'theme_name' in request.POST and\
+            'first_post' in request.POST:
         new_theme = Theme()
         new_theme.author_id = request.user.id
         new_theme.name = request.POST['theme_name']
