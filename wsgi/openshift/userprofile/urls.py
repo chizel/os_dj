@@ -11,15 +11,13 @@ urlpatterns = patterns(
     url(r'^registration/$', views.user_registration, name='registration'),
 
     # profile
-    url(r'^(?P<user_id>\d+)/$', views.user_profile, name='profile'),
+    url(r'^(?P<uid>\d+)/$', views.UserProfileView.as_view(), name='profile'),
     url(r'^edit/$', views.user_profile_edit, name='edit_profile'),
     url(r'^delete/$', views.user_profile_delete, name='delete_profile'),
 
     # private messages
-    url(
-        r'^send_private_message/(?P<to_user>\d+)/$',
-        views.show_pm_form, name='show_pm_form'
-        ),
+    url(r'^send_private_message/(?P<to_user>\d+)/$',
+        views.show_pm_form, name='show_pm_form'),
     url(r'^send_private_message/$', views.send_pm, name='send_pm'),
     url(r'^private_messages/$', views.show_pms, name='show_pms'),
     url(r'^read_private_message/(?P<pm_id>\d+)/$',

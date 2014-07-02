@@ -9,12 +9,22 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext, loader
 from django.contrib.auth.models import User
+from django.views.generic import ListView
 
 from userprofile.models import UserProfile, PrivateMessage
 from userprofile.forms import RegisterForm, EditProfileForm
 from userprofile.forms import PrivateMessageForm, LoginForm
 from userprofile.utils import resize_image
 from settings import MEDIA_ROOT
+
+
+class UserProfileView(ListView):
+    model = UserProfile
+    template_name = 'userprofile/profile.html'
+    context_object_name = 'user_profile'
+
+    def get_queryset(self):
+        return get_object_or_404(UserProfile, pk=self.kwargs.get('uid'))
 
 
 def user_loginsocial(request):
@@ -95,14 +105,6 @@ def user_registration(request):
     return render_to_response('userprofile/registration.html',
                               {'form': form, 'registered': registered},
                               context)
-
-
-def user_profile(request, user_id):
-    user_profile = get_object_or_404(UserProfile, pk=user_id)
-    context = RequestContext(request)
-    return render_to_response('userprofile/profile.html',
-                              {'user_profile': user_profile},
-                              context,)
 
 
 @login_required
