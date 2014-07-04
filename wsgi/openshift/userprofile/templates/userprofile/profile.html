@@ -21,6 +21,7 @@
                 <br />
                 <a href="{% url 'userprofile:show_pms' %}">Private messages</a>
 
+                <p>Your email: {{ user_profile.user.email }}</p>
                 {% if user_profile.unread_pm %}
                     <font color="red" size="-1">({{ user_profile.unread_pm }} new!)</font>
                 {% endif %}
@@ -44,14 +45,15 @@
             <p>Number of messages: {{user_profile.count_messages}}</p>
 
             {% if user_profile.user.first_name %}
-                <p>Name: {{ user_profile.first_name }}</p>
+                <p>Name: {{ user_profile.user.first_name }}</p>
             {% endif %}
 
-            {% if user.user.last_name %}
-                <p>Last name: {{ user_profile.last_name }}</p>
+            {% if user_profile.user.last_name %}
+                <p>Last name: {{ user_profile.user.last_name }}</p>
             {% endif %}
 
             {% if user_profile.about_me %}
+                About me:
                 {{ user_profile.about_me }}
             {% endif %}
         </div>

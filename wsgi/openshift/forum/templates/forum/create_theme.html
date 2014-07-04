@@ -9,9 +9,9 @@
     <form action="{% url 'forum:create_theme' %}" method="post">
     {% csrf_token %}
     <p><label for="id_theme_name">Theme name:</label></p>
-    <p><input type="" name="theme_name" id="id_theme_id" value="" /></p>
+        {{ form.name }}
     <p><label for="id_post">First post:</label></p>
-    <p><textarea name="first_post" cols="50" rows="8" id="id_post"></textarea></p>
+        {{ form.first_post }}
     <input type="submit" value="Send" />
     </form>
 {% else %}

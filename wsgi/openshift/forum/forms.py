@@ -22,6 +22,18 @@ class CreateThemeForm(forms.ModelForm):
         required=True,
         )
 
+    first_post = forms.CharField(
+        max_length=3000,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'id': 'first_post',
+                'placeholder': 'Write your post',
+                }
+            ),
+        required=True,
+        )
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -29,7 +41,7 @@ class PostForm(forms.ModelForm):
 
     post = forms.CharField(
         max_length=3000,
-        widget=forms.TextArea(
+        widget=forms.Textarea(
             attrs={
                 'class': 'form-control',
                 'id': 'post',

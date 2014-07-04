@@ -135,8 +135,11 @@ def user_profile_edit(request):
                     title = 'Error!'
                     message = 'Incorrect image! Please select other image!'
 
-            # if 'email' in request.POST:
-                # update_profile.user.email = request.POST['email']
+            if 'email' in request.POST:
+                update_profile.user.email = request.POST['email']
+
+            update_profile.user.save()
+
         else:
             title = 'Error!'
             message = 'Wrong data!'

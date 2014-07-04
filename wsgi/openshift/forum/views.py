@@ -13,19 +13,23 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
 from forum.models import Branch, Theme, Post
+from forum.forms import CreateThemeForm, PostForm
 from userprofile.models import UserProfile
 
 
-# @method_decorator(login_required())
 class ThemesList(ListView):
     model = Theme
     template_name = 'forum/index.html'
     context_object_name = 'themes'
     paginate_by = 5
 
-    def get_object(self):
-        themes = Theme.objects.order_by('id')
-        return themes
+    def get_context_data(self, *args, **kwargs):
+        context = super(ThemesList, self).get_context_data(**kwargs)
+        return context
+
+
+    def get_queryset(self):
+        return get_list_or_404(Theme)
 
 
 class PostsList(ListView):
@@ -48,27 +52,30 @@ class PostsList(ListView):
 
 @login_required
 def create_theme(request):
-    if request.method == 'POST' and 'theme_name' in request.POST and\
-            'first_post' in request.POST:
-        new_theme = Theme()
-        new_theme.author_id = request.user.id
-        new_theme.name = request.POST['theme_name']
+    if request.method == 'POST':
+
+        form = CreateThemeForm(request.POST)
+        new_theme = form.save(commit=False)
+        new_theme.user_id = request.user.id
+        new_theme.last_user_id = request.user.id
         new_theme.branch_id = 1
         new_theme.save()
 
         new_post = Post()
         new_post.theme_id = new_theme.id
-        new_post.post = request.POST['first_post']
+        new_post.post = form.cleaned_data['first_post']
         new_post.user_id = request.user.id
         UserProfile.objects.filter(pk=request.user.id).update(
             count_messages=F('count_messages')+1)
-        # new_post.save()
-        # return HttpResponseRedirect(reverse('forum:theme'
-        # url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
-        return HttpResponse(str(new_theme.id))
-
+        new_post.save()
+        return HttpResponseRedirect(reverse('forum:theme',
+                                    args=[new_theme.id]))
     else:
-        return render(request, 'forum/create_theme.html', {})
+        form = CreateThemeForm()
+        context = RequestContext(request)
+        return render_to_response('forum/create_theme.html',
+                                  {'form': form},
+                                  context)
 
 
 @require_POST

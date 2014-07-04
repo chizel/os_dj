@@ -12,6 +12,7 @@ urlpatterns = patterns(
         PostsList.as_view(), name='theme'),
 
     url(r'^create_theme/$', views.create_theme, name='create_theme'),
+
     # posts
     url(r'^add_post/$', views.add_post, name='add_post'),
     url(r'^delete_post/(?P<post_id>\d+)/$', views.delete_post,
