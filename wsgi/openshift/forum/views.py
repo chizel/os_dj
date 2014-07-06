@@ -27,7 +27,6 @@ class ThemesList(ListView):
         context = super(ThemesList, self).get_context_data(**kwargs)
         return context
 
-
     def get_queryset(self):
         return get_list_or_404(Theme)
 
@@ -40,6 +39,7 @@ class PostsList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(PostsList, self).get_context_data(**kwargs)
+        context['form'] = PostForm()
         context['theme'] = get_object_or_404(
             Theme,
             pk=self.kwargs.get("theme_id")
@@ -50,10 +50,52 @@ class PostsList(ListView):
         return get_list_or_404(Post, theme_id=self.kwargs.get("theme_id"))
 
 
+def create_post(theme_id, post_body, user_id):
+    theme = get_object_or_404(Theme, pk=int(theme_id))
+    user_id = int(user_id)
+    post = Post()
+    post.theme_id = theme.id
+    post.post = post_body
+    post.user_id = user_id
+    post.save()
+    UserProfile.objects.filter(pk=user_id).update(
+        count_messages=F('count_messages')+1)
+    theme.increment_count_posts()
+    return True
+
+
+def create_theme(theme_name, first_post, user_id):
+    theme = Theme()
+    theme.user_id = user_id
+    theme.last_user_id = user_id
+    theme.branch_id = 1
+    theme.save()
+    create_post(theme.id, first_post, user_id)
+    return True
+
+
+@require_POST
+@login_required
+def add_post(request, theme_id):
+    form = PostForm(request.POST)
+
+    if form.is_valid():
+        create_post(
+            theme_id,
+            form.cleaned_data['post'],
+            request.user.id)
+
+    # redirecting to the last page
+    posts_list = get_list_or_404(Post, theme_id=theme_id)
+    paginator = Paginator(posts_list, 5)
+
+    url = reverse('forum:theme', args=[theme_id, paginator.num_pages])
+    return HttpResponseRedirect(url)
+
+
 @login_required
 def create_theme(request):
     if request.method == 'POST':
-
         form = CreateThemeForm(request.POST)
         new_theme = form.save(commit=False)
         new_theme.user_id = request.user.id
@@ -76,29 +118,6 @@ def create_theme(request):
         return render_to_response('forum/create_theme.html',
                                   {'form': form},
                                   context)
-
-
-@require_POST
-@login_required
-def add_post(request):
-    if 'post' not in request.POST or not request.POST['post'].strip():
-        return redirect(reverse('blog:list_of_posts'))
-
-    theme = get_object_or_404(Theme, pk=request.POST['theme_id'])
-    new_post = Post()
-    new_post.theme_id = theme.id
-    new_post.post = request.POST['post']
-    new_post.user_id = request.user.id
-    UserProfile.objects.filter(pk=request.user.id).update(
-        count_messages=F('count_messages')+1)
-    new_post.save()
-    theme.increment_count_posts()
-
-    # redirection to the last page
-    posts_list = get_list_or_404(Post, theme_id=theme.id)
-    paginator = Paginator(posts_list, 5)
-    url = reverse('forum:theme', args=[theme.id, paginator.num_pages])
-    return HttpResponseRedirect(url)
 
 
 @require_GET

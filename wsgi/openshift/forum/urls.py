@@ -14,7 +14,7 @@ urlpatterns = patterns(
     url(r'^create_theme/$', views.create_theme, name='create_theme'),
 
     # posts
-    url(r'^add_post/$', views.add_post, name='add_post'),
+    url(r'^add_post/(?P<theme_id>\d+)/$', views.add_post, name='add_post'),
     url(r'^delete_post/(?P<post_id>\d+)/$', views.delete_post,
         name='delete_post'),
     )

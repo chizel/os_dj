@@ -4,107 +4,116 @@
 
 {% block content %}
 
-<div class="forum_theme_name">
-    <h2><a href="{% url 'forum:list_of_themes' %}">Forum</a> ::
-    <a href="{% url 'forum:theme' theme.id %}">{{ theme.name }}</a></h2>
-</div>
-
-{% for post in posts%}
-<div class="forum_post">
-    <div class="forum_user_info">
-
-        <a href="{% url 'userprofile:profile' post.user.id %}">{{ post.user.user.username }}</a>
-        <br />
-        {% if post.user.avatar %}
-            <img src="/media/user_avatar/{{ post.user.id }}.jpg" />
-        {% else %}
-            <img src="/media/user_avatar/default.png" />
-        {% endif %}
-        <p>Posts: {{ post.user.count_messages }}</p>
-    </div> 
-
-    <div class="forum_post_body">
-    <script>document.write(moment("{{post.created|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
-        <br />
-        {{ post.post}}
-
-        {% if forloop.last and post.user_id == user.id and page_obj.number == page_obj.paginator.num_pages%}
-            <a href="{% url 'forum:delete_post' post.id %}">delete</a>
-        {% endif %}
+    <div class="forum_theme_name">
+        <h2><a href="{% url 'forum:list_of_themes' %}">Forum</a> ::
+        <a href="{% url 'forum:theme' theme.id %}">{{ theme.name }}</a></h2>
     </div>
-</div>
-{% empty %}
-    <p>No posts are available.</p>
-{% endfor %}
 
-<div class="forum_send_post">
-    <div class="forum_send_post_form">
+    {% for post in posts%}
+        <div class="forum_post">
+            <div class="forum_user_info">
 
-{% if user.is_authenticated %}
-<!-- ADD_POST FORM -->
-<form class="form-horizontal" role="form" method="post" action="{% url 'forum:add_post' %}">
-    {% csrf_token %}
-    <!-- POST-->
-    <div class="form-group">
-        <label for="post" class="col-lg-2 control-label">Answer:</label>
-        <div class="col-lg-10">
-        <textarea name="post" cols="50" rows="5" class="input-xlarge"></textarea>
+                <a href="{% url 'userprofile:profile' post.user.id %}">
+                    {{ post.user.user.username }}
+                </a>
+                <br />
+                {% if post.user.avatar %}
+                    <img src="/media/user_avatar/{{ post.user.id }}.jpg" />
+                {% else %}
+                    <img src="/media/user_avatar/default.png" />
+                {% endif %}
+                <p>Posts: {{ post.user.count_messages }}</p>
+            </div> 
+
+            <div class="forum_post_body">
+                <script>document.write(
+                            moment(
+                                "{{post.created|date:"Y-m-d H:m:s"}}"
+                                ).format(
+                                    "DD-MMM-YYYY HH:mm:ss")
+                                    );</script>
+                <br />
+                {{ post.post}}
+
+                {% if forloop.last and post.user_id == user.id and page_obj.number == page_obj.paginator.num_pages%}
+                    <a href="{% url 'forum:delete_post' post.id %}">delete</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
-    <!-- SUBMIT_BUTTON -->
-    <div class="form-group">
-        <div class="col-lg-offset-2 col-lg-10">
-        <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-    </div>
-    <input type="hidden" name="theme_id" value="{{theme.id}}" />
-</form>
+    {% empty %}
+        <p>No posts are available.</p>
+    {% endfor %}
 
-{% else %}
-    <p><a href="{% url 'userprofile:login' %}">Login</a> or 
-    <a href="{% url 'userprofile:registration' %}">register</a> to add posts!</p>
-{% endif %}
-</div>
-</div>
+    <div class="forum_send_post">
+    {% if user.is_authenticated %}
+        <!-- ADD_POST FORM -->
+        <form class="form-horizontal" role="form" method="post"
+                action="{% url 'forum:add_post' theme.id %}">
+            {% csrf_token %}
+            <!-- POST-->
+            <div class="form-group">
+                <label for="post" class="col-lg-2 control-label">Answer:</label>
+                <div class="col-lg-10">
+                    {{ form.post }}
+                </textarea>
+                </div>
+            </div>
 
-<!-- pagination --!>
-{% if is_paginated %}
-    <div class="pagination">
-        <span class="page-links">
+            <!-- SUBMIT_BUTTON -->
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+                </div>
+            </div>
+        </form>
+    {% else %}
+        <p>
+            <a href="{% url 'userprofile:login' %}">Login</a> or 
+            <a href="{% url 'userprofile:registration' %}">
+                register
+            </a>
+            to add posts!
+        </p>
+    {% endif %}
+    </div>
+
+    <!-- pagination --!>
+    {% if is_paginated %}
+        <div class="pagination">
            {% if page_obj.has_previous %}
                 {% if page_obj.previous_page_number > 1 %}
-                    |<a href="{% url 'forum:theme' theme.id %}"> 1 </a>
+                    |<a href="{% url 'forum:theme' theme.id %}">1</a>
                 {% endif %}
 
-                |<a href="{% url 'forum:theme' theme.id page_obj.previous_page_number %}"> <<< </a>|
+                |<a href="{% url 'forum:theme' 
+                    theme.id page_obj.previous_page_number %}"> <<< </a>|
             {% endif %}
 
-            <span class="page-current">
                 Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </span>
 
             {% if page_obj.has_next %}
-                |<a href="{% url 'forum:theme' theme.id page_obj.next_page_number %}"> >>> </a>|
+                |<a href="{% url 'forum:theme'
+                     theme.id page_obj.next_page_number %}"> >>> </a>|
             {% endif %}
-        </span>
-    </div>
-{% endif %}
-    {% if posts.next_page_number < posts.paginator.num_pages %}
-        <a href="{% url 'forum:theme' theme.id posts.paginator.num_pages %}/">{{ posts.paginator.num_pages }} </a>|
+        </div>
     {% endif %}
 
-<form class="form-horizontal" role="form" method="get" action="{% url 'forum:theme' theme.id %}">
-<!-- PAGE_NUMBER -->
-<div class="form-group">
-    </div>
-<!-- SUBMIT_BUTTON -->
-<div class="input-append">
-    <div class="col-lg-1">
-        <input type="text" name="page" value="" size="5" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-default">Go</button>
-</div>
-</form>
+        {% if posts.next_page_number < posts.paginator.num_pages %}
+            <a href="{% url 'forum:theme' theme.id posts.paginator.num_pages %}/">{{ posts.paginator.num_pages }} </a>|
+        {% endif %}
 
-</div>
+    <form class="form-horizontal" role="form" method="get" action="{% url 'forum:theme' theme.id %}">
+    <!-- PAGE_NUMBER -->
+    <div class="form-group">
+        </div>
+    <!-- SUBMIT_BUTTON -->
+    <div class="input-append">
+        <div class="col-lg-1">
+            <input type="text" name="page" value="" size="5" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-default">Go</button>
+    </div>
+    </form>
+
+    </div>
 {% endblock %}

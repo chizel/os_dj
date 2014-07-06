@@ -38,6 +38,7 @@ class CreateThemeForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
+        fields = ['post', ]
 
     post = forms.CharField(
         max_length=3000,
