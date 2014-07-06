@@ -64,16 +64,6 @@ def create_post(theme_id, post_body, user_id):
     return True
 
 
-def create_theme(theme_name, first_post, user_id):
-    theme = Theme()
-    theme.user_id = user_id
-    theme.last_user_id = user_id
-    theme.branch_id = 1
-    theme.save()
-    create_post(theme.id, first_post, user_id)
-    return True
-
-
 @require_POST
 @login_required
 def add_post(request, theme_id):
@@ -93,27 +83,30 @@ def add_post(request, theme_id):
     return HttpResponseRedirect(url)
 
 
-@login_required
-def create_theme(request):
-    if request.method == 'POST':
-        form = CreateThemeForm(request.POST)
-        new_theme = form.save(commit=False)
-        new_theme.user_id = request.user.id
-        new_theme.last_user_id = request.user.id
-        new_theme.branch_id = 1
-        new_theme.save()
+def create_theme(theme_name, first_post, user_id):
+    theme = Theme()
+    theme.user_id = user_id
+    theme.last_user_id = user_id
+    theme.branch_id = 1
+    theme.name = theme_name
+    theme.save()
+    create_post(theme.id, first_post, user_id)
+    return theme.id
 
-        new_post = Post()
-        new_post.theme_id = new_theme.id
-        new_post.post = form.cleaned_data['first_post']
-        new_post.user_id = request.user.id
-        UserProfile.objects.filter(pk=request.user.id).update(
-            count_messages=F('count_messages')+1)
-        new_post.save()
+
+@login_required
+def add_theme(request):
+    form = CreateThemeForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        theme_id = create_theme(
+            form.cleaned_data['name'],
+            form.cleaned_data['first_post'],
+            request.user.id)
+
         return HttpResponseRedirect(reverse('forum:theme',
-                                    args=[new_theme.id]))
+                                    args=[theme_id]))
     else:
-        form = CreateThemeForm()
         context = RequestContext(request)
         return render_to_response('forum/create_theme.html',
                                   {'form': form},
@@ -153,7 +146,7 @@ def delete_post(request, post_id):
         count_messages=F('count_messages')-1)
     theme.decrement_count_posts()
 
-    # redirection to the last page
+    # redirect to the last page
     posts_list = get_list_or_404(Post, theme_id=theme_id)
     paginator = Paginator(posts_list, 5)
     url = reverse('forum:theme', args=[theme_id, paginator.num_pages])

@@ -4,18 +4,27 @@
 
 {% block content %}
 
-<div class="forum_theme_create">
-    {% if user.is_authenticated %}
-    <form action="{% url 'forum:create_theme' %}" method="post">
-    {% csrf_token %}
-    <p><label for="id_theme_name">Theme name:</label></p>
-        {{ form.name }}
-    <p><label for="id_post">First post:</label></p>
-        {{ form.first_post }}
-    <input type="submit" value="Send" />
-    </form>
-{% else %}
-    <p><a href="{% url 'userprofile:login' %}">Login</a> or <a href="{% url 'userprofile:registration' %}">register</a> to add posts!</p>
-{% endif %}
-</div>
+    <div class="forum_theme_create">
+        {% if user.is_authenticated %}
+            <form action="{% url 'forum:create_theme' %}" method="post">
+                {% csrf_token %}
+                <p><label for="id_theme_name">Theme name:</label></p>
+                    {{ form.name }}
+                <p><label for="id_post">First post:</label></p>
+                    {{ form.first_post }}
+                <input type="submit" value="Send" />
+            </form>
+        {% else %}
+            <p>
+                <a href="{% url 'userprofile:login' %}">
+                    Login
+                </a>
+                or
+                <a href="{% url 'userprofile:registration' %}">
+                    register
+                </a>
+                to add posts!
+            </p>
+        {% endif %}
+    </div>
 {% endblock %}
