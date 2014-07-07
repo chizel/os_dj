@@ -4,41 +4,27 @@
 
 {% block content %}
 <div class="block_content">
-
-    {% if error %}
+{% if error %}
         <p>{{ error }}</p>
     {% endif %}
 
-    <form class="form-horizontal" role="form" method="post" action="{% url 'userprofile:login' %}">
-        {% csrf_token %}
+    <div style="width:50%">
+        <form class="form-horizontal" role="form" method="post" action="{% url 'userprofile:login' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
 
-        <!-- USERNAME -->
-        <div class="form-group">
-            <label for="username" class="col-lg-2 control-label">Username:</label>
-            <div class="col-lg-10">
-                {{ form.username }}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+
+            <!-- SUBMIT_BUTTON -->
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </div>
             </div>
-        </div>
-
-        <!-- PASSWORD -->
-        <div class="form-group">
-            <label for="password" class="col-lg-2 control-label">Password:</label>
-            <div class="col-lg-10">
-                {{ form.password }}
-            </div>
-        </div>
-
-        {% if next %}
-            <input type="hidden" name="next" value="{{ next }}" />
-        {% endif %}
-
-        <!-- SUBMIT_BUTTON -->
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 
 </div>
 {% endblock %}

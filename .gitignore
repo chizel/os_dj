@@ -1,6 +1,6 @@
 *.py[co]
 *.sw[po]
-*.sqlite3
+db.sqlite3
 *.bak
 *.orig
 *~

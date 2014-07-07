@@ -36,17 +36,18 @@ def user_login(request):
         return redirect('/')
 
     context = RequestContext(request)
+    form = LoginForm()
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-
-        # link to return user to the page from what he came
+        # redirect link
         if 'next' in request.POST:
             NEXT = request.POST['next']
         else:
             NEXT = '/'
+
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             if user.is_active:
@@ -55,24 +56,27 @@ def user_login(request):
             else:
                 message = 'Your account is disabled.'
                 title = 'Error!'
-                return render_to_response('basesite/notification.html',
-                                          {'title': title, 'message': message},
-                                          context)
+                return render_to_response(
+                    'basesite/notification.html',
+                    {'title': title, 'message': message},
+                    context)
         else:
             error = 'Invalid login details supplied.'
-            return render_to_response('userprofile/login.html',
-                                      {'next': NEXT, 'error': error},
-                                      context)
+            return render_to_response(
+                'userprofile/login.html',
+                {'next': NEXT, 'error': error, 'form': form},
+                context)
     else:
+
         if 'next' in request.GET:
             NEXT = request.GET['next']
         else:
             NEXT = None
-        form = LoginForm()
 
-        return render_to_response('userprofile/login.html',
-                                  {'next': NEXT, 'form': form},
-                                  context)
+        return render_to_response(
+            'userprofile/login.html',
+            {'next': NEXT, 'form': form},
+            context)
 
 
 @login_required

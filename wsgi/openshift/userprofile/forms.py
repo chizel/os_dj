@@ -53,6 +53,7 @@ class LoginForm(forms.ModelForm):
                 'placeholder': 'Username',
                 }
             ),
+        required=True
         )
 
     password = forms.CharField(
@@ -63,6 +64,7 @@ class LoginForm(forms.ModelForm):
                 'placeholedr': 'Password',
                 }
             ),
+        required=True
         )
 
 
