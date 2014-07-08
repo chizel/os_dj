@@ -15,26 +15,26 @@ from models import BlogPost, BlogPostComment, Tag
 from forms import BlogPostForm, BlogPostCommentForm
 
 
-class BlogPostsList(ListView):
+class BlogPostList(ListView):
     model = BlogPost
     template_name = 'blog/list_of_posts.html'
     context_object_name = 'posts'
     paginate_by = 5
 
     def get_context_data(self, *args, **kwargs):
-        context = super(BlogPostsList, self).get_context_data(**kwargs)
+        context = super(BlogPostList, self).get_context_data(**kwargs)
         context['title'] = 'Blog posts'
         context['pag_url'] = reverse('blog:list_of_posts')
         return context
 
 
-class BlogTagList(BlogPostsList):
+class BlogTagList(BlogPostList):
     def dispatch(self, request, *args, **kwargs):
         self.tag = get_object_or_404(Tag, name=self.kwargs.get('tag'))
         return super(BlogTagList, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(BlogPostsList, self).get_context_data(**kwargs)
+        context = super(BlogPostList, self).get_context_data(**kwargs)
         context['title'] = self.tag.name
         context['pag_url'] = reverse('blog:show_tag',
                                      kwargs={'tag': self.tag.name})
@@ -44,21 +44,22 @@ class BlogTagList(BlogPostsList):
         return get_list_or_404(BlogPost, tag=self.tag)
 
 
-class UserBlogPostsList(BlogPostsList):
+class UserBlogPostList(BlogPostList):
     def dispatch(self, request, *args, **kwargs):
         self.user = get_object_or_404(UserProfile,
-                                      pk=self.kwargs.get('user_id'))
-        return super(BlogTagList, self).dispatch(request, *args, **kwargs)
+                                      pk=self.kwargs.get('uid'))
+        return super(BlogPostList, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
-        context = super(BlogPostsList, self).get_context_data(**kwargs)
-        context['title'] = 'User posts by tag'
+        context = super(BlogPostList, self).get_context_data(**kwargs)
+        context['title'] = str(self.user.user.username) + '\'s posts by tag'
+        context['pag_url'] = reverse('blog:user_bps',
+                                     kwargs={'uid': self.user.id})
         context['user'] = self.user
         return context
 
     def get_queryset(self):
-        user = get_object_or_404(User, pk=self.kwargs.get('user_id'))
-        return get_list_or_404(BlogPost, user=user.id)
+        return get_list_or_404(BlogPost, user=self.user)
 
 
 class ShowPost(DetailView):
@@ -81,7 +82,6 @@ def add_post(request):
         new_post.user_id = request.user.id
         new_post.save()
 
-    # !!! tags may contain only A-Za-z0-9 -
         if form.cleaned_data['tags']:
             tags = form.cleaned_data['tags'].split(',')
 
@@ -97,6 +97,7 @@ def add_post(request):
                 new_tag = get_object_or_None(Tag, name=tag)
 
                 if not new_tag:
+                    # create new tag
                     new_tag = Tag(name=tag)
                     new_tag.save()
                 new_post.tag.add(new_tag)

@@ -4,21 +4,21 @@ from blog import views
 urlpatterns = patterns(
     '',
     # list of blogposts
-    url(r'^$', views.BlogPostsList.as_view(), name='list_of_posts'),
-    url(r'^(?P<page>\d+)/$', views.BlogPostsList.as_view(),
+    url(r'^$', views.BlogPostList.as_view(), name='list_of_posts'),
+    url(r'^(?P<page>\d+)/$', views.BlogPostList.as_view(),
         name='list_of_posts'),
-
-    # list of user's posts
-    url(r'^user/(?P<uid>\d+)/(?P<page>\d+)/$',
-        views.UserBlogPostsList, name='user_bps'),
-    url(r'^user/(?P<uid>\d+)/$',
-        views.UserBlogPostsList, name='user_bps'),
 
     # list of posts by tag
     url(r'^tag/(?P<tag>[A-Za-z0-9 -_]+)/(?P<page>\d+)/$',
         views.BlogTagList.as_view(), name='show_tag'),
     url(r'^tag/(?P<tag>[A-Za-z0-9 -_]+)/$',
         views.BlogTagList.as_view(), name='show_tag'),
+
+    # list of user's posts
+    url(r'^user/(?P<uid>\d+)/(?P<page>\d+)/$',
+        views.UserBlogPostList.as_view(), name='user_bps'),
+    url(r'^user/(?P<uid>\d+)/$',
+        views.UserBlogPostList.as_view(), name='user_bps'),
 
     # show post
     url(r'^post/(?P<pk>\d+)/$', views.ShowPost.as_view(), name='show_post'),

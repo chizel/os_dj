@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 
@@ -45,6 +47,17 @@ class BlogPostForm(forms.ModelForm):
             ),
         required=False,
         )
+
+    def clean_tags(self):
+        tags = self.cleaned_data['tags']
+        r = re.compile('^[\w ,]+$')
+
+        if r.match(tags):
+            return tags
+        else:
+            raise forms.ValidationError(
+                ('Invalid value! Tags must contain "A-Za-z0-9_" " "(space)\
+                        and "," for separation!'), code='invalid')
 
 
 class BlogPostCommentForm(forms.ModelForm):
