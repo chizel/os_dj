@@ -4,49 +4,28 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-    <a href="{% url 'forum:create_theme' %}">Create new theme</a>
-{% endif %}
-
-{% if themes %}
-    <ul>
-    {% for theme in themes%}
-    <li>
-    <a href="{% url 'forum:theme' theme.id %}">{{ theme.name}}</a>
-    | Created: <script>document.write(moment("{{theme.created|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
-    | Number of posts: {{theme.count_posts}}
-    | Author: <a href="{% url 'userprofile:profile' theme.user.id %}">{{theme.author}}</a> |
-    </li>
-    {% endfor %}
-    </ul>
-
-<!-- pagination --!>
-{% if is_paginated %}
-    <div class="pagination">
-        <span class="page-links">
-           {% if page_obj.has_previous %}
-                {% if page_obj.previous_page_number > 1 %}
-                    |<a href="{% url 'forum:list_of_themes' %}"> 1 </a>
-                {% endif %}
-
-                |<a href="{% url 'forum:list_of_themes' page_obj.previous_page_number %}"> <<< </a>|
-            {% endif %}
-
-            <span class="page-current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </span>
-
-            {% if page_obj.has_next %}
-                |<a href="{% url 'forum:list_of_themes' page_obj.next_page_number %}"> >>> </a>|
-            {% endif %}
-        </span>
-    </div>
-{% endif %}
-    {% if posts.next_page_number < posts.paginator.num_pages %}
-        <a href="{% url 'forum:list_of_themes'  posts.paginator.num_pages %}/">{{ posts.paginator.num_pages }} </a>|
+    {% if user.is_authenticated %}
+        <a href="{% url 'forum:create_theme' %}">Create new theme</a>
     {% endif %}
 
-{% else %}
-    <p>No posts are available.</p>
-{% endif %}
+    {% if themes %}
+        <ul>
+        {% for theme in themes%}
+        <li>
+        <a href="{% url 'forum:theme' theme.id %}">{{ theme.name}}</a>
+        | Created: <script>document.write(moment("{{theme.created|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
+        | Number of posts: {{theme.count_posts}}
+        | Author: <a href="{% url 'userprofile:profile' theme.user.id %}">{{theme.author}}</a> |
+        </li>
+        {% endfor %}
+        </ul>
+
+        {% if is_paginated %}
+        <!-- pagination --!>
+            {% include 'basesite/pagination.html' %}
+        {% endif %}
+
+    {% else %}
+        <p>No posts are available.</p>
+    {% endif %}
 {% endblock %}

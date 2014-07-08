@@ -21,7 +21,7 @@ def resize_image(image, full_path, max_length):
 
     image = StringIO.StringIO(image.read())
 
-    try: 
+    try:
         image = Image.open(image)
     except:
         return None

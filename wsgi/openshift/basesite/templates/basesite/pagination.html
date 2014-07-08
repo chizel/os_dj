@@ -1,0 +1,18 @@
+<div class="pagination">
+       {% if page_obj.has_previous %}
+            {% if page_obj.previous_page_number > 1 %}
+                |<a href="{{ pag_url }}1/"> 1 </a>
+            {% endif %}
+
+            |<a href="{{ pag_url }}{{ page_obj.previous_page_number}}/"> <<< </a>|
+        {% endif %}
+
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+
+        {% if page_obj.has_next %}
+            |<a href="{{ pag_url }}{{ page_obj.next_page_number}}/"> >>> </a>|
+        {% endif %}
+{% if page_obj.next_page_number < page_obj.paginator.num_pages %}
+<a href="{{ pag_url }}{{page_obj.paginator.num_pages}}/">{{ page_obj.paginator.num_pages }} </a>|
+{% endif %}
+</div>

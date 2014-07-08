@@ -8,9 +8,11 @@ urlpatterns = patterns(
     url(r'^(?P<page>\d+)/$', ThemesList.as_view(), name='list_of_themes'),
 
     # themes
-    url(r'^theme/(?P<theme_id>\d+)/$', PostsList.as_view(), name='theme'),
     url(r'^theme/(?P<theme_id>\d+)/(?P<page>\d+)/$',
         PostsList.as_view(), name='theme'),
+    url(r'^theme/(?P<theme_id>\d+)/$', PostsList.as_view(), name='theme'),
+
+    # create theme
     url(r'^create_theme/$', views.add_theme, name='create_theme'),
 
     # posts

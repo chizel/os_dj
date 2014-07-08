@@ -25,6 +25,7 @@ class ThemesList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ThemesList, self).get_context_data(**kwargs)
+        context['pag_url'] = reverse('forum:list_of_themes')
         return context
 
     def get_queryset(self):
@@ -37,17 +38,20 @@ class PostsList(ListView):
     context_object_name = 'posts'
     paginate_by = 5
 
+    def dispatch(self, request, *args, **kwargs):
+        self.theme_id = self.kwargs.get('theme_id')
+        return super(PostsList, self).dispatch(request, *args, **kwargs)
+
     def get_context_data(self, *args, **kwargs):
         context = super(PostsList, self).get_context_data(**kwargs)
         context['form'] = PostForm()
-        context['theme'] = get_object_or_404(
-            Theme,
-            pk=self.kwargs.get("theme_id")
-            )
+        context['pag_url'] = reverse('forum:theme',
+                                     kwargs={'theme_id': self.theme_id})
+        context['theme'] = get_object_or_404(Theme, pk=self.theme_id)
         return context
 
     def get_queryset(self):
-        return get_list_or_404(Post, theme_id=self.kwargs.get("theme_id"))
+        return get_list_or_404(Post, theme_id=self.theme_id)
 
 
 def create_post(theme_id, post_body, user_id):

@@ -77,30 +77,10 @@
     {% endif %}
     </div>
 
-    <!-- pagination --!>
     {% if is_paginated %}
-        <div class="pagination">
-           {% if page_obj.has_previous %}
-                {% if page_obj.previous_page_number > 1 %}
-                    |<a href="{% url 'forum:theme' theme.id %}">1</a>
-                {% endif %}
-
-                |<a href="{% url 'forum:theme' 
-                    theme.id page_obj.previous_page_number %}"> <<< </a>|
-            {% endif %}
-
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-
-            {% if page_obj.has_next %}
-                |<a href="{% url 'forum:theme'
-                     theme.id page_obj.next_page_number %}"> >>> </a>|
-            {% endif %}
-        </div>
+    <!-- pagination --!>
+        {% include 'basesite/pagination.html' %}
     {% endif %}
-
-        {% if posts.next_page_number < posts.paginator.num_pages %}
-            <a href="{% url 'forum:theme' theme.id posts.paginator.num_pages %}/">{{ posts.paginator.num_pages }} </a>|
-        {% endif %}
 
     <form class="form-horizontal" role="form" method="get" action="{% url 'forum:theme' theme.id %}">
     <!-- PAGE_NUMBER -->

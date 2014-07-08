@@ -118,7 +118,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     #my
     'social.apps.django_app.default',
-    'south',
     'forum',
     'userprofile',
     'blog',

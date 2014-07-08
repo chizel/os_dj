@@ -1,33 +1,33 @@
 {% extends 'basesite/index.html' %}
 
-{% block title %}{{ post.title }}{% endblock %}
+{% block title %}{{ blogpost.title }}{% endblock %}
 
 {% block content %}
 
 <div id="posts">
-    <h1>{{ post.title }}</h1>
-    {{ post.body }}
+    <h1>{{ blogpost.title }}</h1>
+    {{ blogpost.body }}
     <p>
         Author: 
-        {% if post.user.avatar %}
-            <img src="/media/user_avatar/{{ post.user.id }}.jpg" height="25px" />
+        {% if blogpost.user.avatar %}
+            <img src="/media/user_avatar/{{ blogpost.user.id }}.jpg" height="25px" />
         {% else %}
             <img src="/media/user_avatar/default.png" height="25px" />
         {% endif %}
-        <a href="{{ post.user.get_absolute_url }}">{{ post.user.user.username }}</a>
+        <a href="{{ blogpost.user.get_absolute_url }}">{{ blogpost.user.user.username }}</a>
     </p>
 
 
-    {% if post.tag.all %}
+    {% if blogpost.tag.all %}
         Tags: 
-        {% for tag in post.tag.all %}
+        {% for tag in blogpost.tag.all %}
             <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
             {% if not forloop.last %}, {% endif %}
         {% endfor %}
     {% endif %}
 </div>
 
-{% if post.count_comments > 0 %}
+{% if blogpost.count_comments > 0 %}
     <h2>Comments ({{post.count_comments}}):</h2>
     <div id="comments">
         {% for comment in comments.all %}
@@ -48,24 +48,20 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-<!-- comment form -->
-<form class="form-horizontal" role="form" method="post" action="{% url 'blog:add_comment' post.id %}">
-    {% csrf_token %}
-    <!-- comment -->
-    <div class="form-group">
-        <label for="comment" class="col-lg-3 control-label">Add your commentary:</label>
-        <div class="col-lg-10">
-            <textarea name="comment" cols="50" rows="5" class="input-xlarge"></textarea>
+    <!-- comment form -->
+    <form class="form-horizontal" role="form" method="post" 
+        action="{% url 'blog:add_comment' blogpost.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- submit_button -->
+        <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
         </div>
-    </div>
-    <!-- submit_button -->
-    <div class="form-group">
-        <div class="col-lg-offset-2 col-lg-10">
-            <button type="submit" class="btn btn-default">Submit</button>
-        </div>
-    </div>
-</form>
-<!-- end comment form -->
+    </form>
+    <!-- end comment form -->
 {% endif %}
 
 {% endblock %}

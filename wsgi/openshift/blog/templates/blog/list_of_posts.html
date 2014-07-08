@@ -21,24 +21,11 @@
 {% endfor %}
 <!-- end posts -->
 
-<!-- paginator --!>
-<div>
-    {% if posts.number > 1 %}
-        |<a href="{% url 'blog:list_of_posts'%}1/"> 1 </a>
-    {% endif %}
-    {% if posts.has_previous %}
-
-        |<a href="{% url 'blog:list_of_posts' %}{{ posts.previous_page_number}}/"> <<< </a>|
-    {% endif %}
-
-    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
-    {% if posts.has_next %}
-        |<a href="{% url 'blog:list_of_posts' %}{{ posts.next_page_number}}/"> >>> </a>|
-    {% endif %}
-    {% if posts.next_page_number < posts.paginator.num_pages %}
-        <a href="{% url 'blog:list_of_posts' %}{{ posts.paginator.num_pages }}/">{{ posts.paginator.num_pages }} </a>|
-    {% endif %}
-<!-- end paginator --!>
+<!-- pagination --!>
+{% if is_paginated %}
+    {% include "basesite/pagination.html" %}
+{% endif %}
+<!-- end pagination --!>
 
 
 </div>
