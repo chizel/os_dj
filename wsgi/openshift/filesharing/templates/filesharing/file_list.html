@@ -1,0 +1,9 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}{{section.name}}{% endblock %}
+
+{% block content %}
+    {% for file in files %}
+        <a href="{% url 'filesharing:view_file' file.id %}">{{file.disply_name}}</a>
+    {% endfor %}
+{% endblock %}
