@@ -47,6 +47,7 @@ def user_login(request):
 
         username = request.POST['username']
         password = request.POST['password']
+        u = UserProfile.objects.get(pk=1)
         user = authenticate(username=username, password=password)
 
         if user is not None:
@@ -90,25 +91,20 @@ def user_registration(request):
         return redirect('/')
 
     context = RequestContext(request)
-    registered = False
+    form = RegisterForm(request.POST or None)
 
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-
-        if user_form.is_valid():
-            user = user_form.save()
+        if form.is_valid():
+            user = form.save()
             user.set_password(user.password)
             user.save()
             profile = UserProfile()
             profile.user = user
             profile.save()
-            registered = True
-    else:
-        form = RegisterForm()
+            return redirect('/')
 
     return render_to_response('userprofile/registration.html',
-                              {'form': form, 'registered': registered},
-                              context)
+                              {'form': form}, context)
 
 
 @login_required

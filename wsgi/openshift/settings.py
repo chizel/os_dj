@@ -122,7 +122,7 @@ INSTALLED_APPS = (
     'userprofile',
     'blog',
     'basesite',
-
+    'filesharing',
 )
 
 #SOCIAL AUTHORIZATION

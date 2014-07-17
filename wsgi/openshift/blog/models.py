@@ -3,7 +3,11 @@ from userprofile.models import UserProfile
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=50)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        )
 
     # number of posts with this tag
     count_articles = models.IntegerField(default=1)

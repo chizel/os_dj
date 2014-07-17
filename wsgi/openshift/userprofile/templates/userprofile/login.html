@@ -9,6 +9,7 @@
     {% endif %}
 
     <div style="width:50%">
+        {{ form.errors }}
         <form class="form-horizontal" role="form" method="post" action="{% url 'userprofile:login' %}">
             {% csrf_token %}
             {{ form.as_p }}

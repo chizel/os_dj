@@ -22,6 +22,7 @@ class BlogPostForm(forms.ModelForm):
                 }
             ),
         required=True,
+        help_text='Blogpost\'s title',
         )
 
     body = forms.CharField(
@@ -34,6 +35,7 @@ class BlogPostForm(forms.ModelForm):
                 }
             ),
         required=True,
+        help_text='Blogpost\'s title',
         )
 
     tags = forms.CharField(
@@ -46,6 +48,7 @@ class BlogPostForm(forms.ModelForm):
                 }
             ),
         required=False,
+        help_text='Blogpost\'s tags',
         )
 
     def clean_tags(self):
@@ -75,4 +78,5 @@ class BlogPostCommentForm(forms.ModelForm):
                 }
             ),
         required=True,
+        help_text='Blogpost\'s comment',
         )

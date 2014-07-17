@@ -15,6 +15,12 @@ from models import BlogPost, BlogPostComment, Tag
 from forms import BlogPostForm, BlogPostCommentForm
 
 
+@login_required
+def search_posts(request):
+    q = request.GET['q']
+    return
+
+
 class BlogPostList(ListView):
     model = BlogPost
     template_name = 'blog/list_of_posts.html'

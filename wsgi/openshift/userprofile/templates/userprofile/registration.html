@@ -5,6 +5,7 @@
 {% block content %}
 <div class="block_content">
 
+    <font color="red">{{ form.errors }}</font>
     <form class="form-horizontal" role="form" method="post" action="{% url 'userprofile:registration' %}">
         {% csrf_token %}
         <!-- NAME -->
