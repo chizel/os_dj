@@ -22,6 +22,7 @@ def search_posts(request):
 
 
 class BlogPostList(ListView):
+    '''Show list of blogposts'''
     model = BlogPost
     template_name = 'blog/list_of_posts.html'
     context_object_name = 'posts'
@@ -35,6 +36,7 @@ class BlogPostList(ListView):
 
 
 class BlogTagList(BlogPostList):
+    '''Show list of blogposts by tag'''
     def dispatch(self, request, *args, **kwargs):
         self.tag = get_object_or_404(Tag, name=self.kwargs.get('tag'))
         return super(BlogTagList, self).dispatch(request, *args, **kwargs)
@@ -51,6 +53,7 @@ class BlogTagList(BlogPostList):
 
 
 class UserBlogPostList(BlogPostList):
+    '''Show list of user's blogposts'''
     def dispatch(self, request, *args, **kwargs):
         self.user = get_object_or_404(UserProfile,
                                       pk=self.kwargs.get('uid'))
@@ -69,6 +72,7 @@ class UserBlogPostList(BlogPostList):
 
 
 class ShowPost(DetailView):
+    ''''Show post'''
     model = BlogPost
 
     def get_context_data(self, *args, **kwargs):
@@ -81,6 +85,7 @@ class ShowPost(DetailView):
 
 @login_required
 def add_post(request):
+    '''Add new blogpost'''
     form = BlogPostForm(request.POST or None)
 
     if request.method == 'POST' and form.is_valid():
@@ -89,24 +94,17 @@ def add_post(request):
         new_post.save()
 
         if form.cleaned_data['tags']:
-            tags = form.cleaned_data['tags'].split(',')
+            list_tags = request.POST['tags'].split(',')
+            list_tags = [tag.strip() for tag in list_tags]
+            list_tags = set(list_tags)
 
-            # delete repetitions
-            tags = list(set(tags))
-
-            if len(tags) > 10:
+            if len(list_tags) > 10:
                 return HttpResponse('Amount of tags can\'t be more than 10!')
 
-            tags = [tag.strip() for tag in tags]
-
-            for tag in tags:
-                new_tag = get_object_or_None(Tag, name=tag)
-
-                if not new_tag:
-                    # create new tag
-                    new_tag = Tag(name=tag)
-                    new_tag.save()
-                new_post.tag.add(new_tag)
+            for tag in list_tags:
+                if tag :
+                    new_tag, created = Tag.objects.get_or_create(name=tag)
+                    new_post.tag.add(new_tag.id)
 
         # ??? may be add to user's profile count of blog's post???
         # UserProfile.objects.filter(pk=request.user.id).update(count_blog_posts=F('count_blog_posts')+1)
@@ -118,17 +116,6 @@ def add_post(request):
             {'form': form},
             context
             )
-
-
-def create_tag(requst, tag):
-    tag = tag.trip(tag)
-
-    if not tag:
-        return None
-
-    if not Tag.objects.get(name=tag):
-        new_tag = Tag(name=tag)
-        new_tag.save()
 
 
 @login_required
