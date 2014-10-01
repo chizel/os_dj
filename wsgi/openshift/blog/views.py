@@ -83,6 +83,18 @@ class ShowPost(DetailView):
         return context
 
 
+class ShowComment(DetailView):
+    '''Show blogpost's comment with child comments'''
+    model = BlogPostComment
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ShowComment, self).get_context_data(**kwargs)
+        #context['form'] = BlogPostCommentForm()
+        context['comments'] = BlogPostComment.objects.filter(
+            parent_comment=self.kwargs.get('pk'))
+        return context
+
+
 @login_required
 def add_post(request):
     '''Add new blogpost'''
@@ -102,7 +114,7 @@ def add_post(request):
                 return HttpResponse('Amount of tags can\'t be more than 10!')
 
             for tag in list_tags:
-                if tag :
+                if tag:
                     new_tag, created = Tag.objects.get_or_create(name=tag)
                     new_post.tag.add(new_tag.id)
 
@@ -111,16 +123,16 @@ def add_post(request):
         return redirect('blog:list_of_posts')
     else:
         context = RequestContext(request)
-        return render_to_response(
-            'blog/add_post.html',
-            {'form': form},
-            context
-            )
+        return render_to_response('blog/add_post.html',
+                                  {'form': form}, context)
 
 
 @login_required
 @require_POST
 def add_comment(request, blogpost_id, pid=0):
+    ''' add comment to blogpost
+    pid=0 means that comment haven't any parents comment
+    '''
     form = BlogPostCommentForm(request.POST)
 
     if form.is_valid():

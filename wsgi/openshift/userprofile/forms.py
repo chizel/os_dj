@@ -68,32 +68,39 @@ class LoginForm(forms.ModelForm):
         )
 
 
+class EditUser(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+
 class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('email', 'about_me', 'website')
+        fields = ('about_me', 'website')
+        exclude = ('EditUser',)
 
-    password = forms.CharField(
+    check_password = forms.CharField(
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'id': 'password',
-                'placeholedr': 'password',
+                'id': 'check_password',
+                'placeholedr': 'Your password (required)',
                 }
         ),
         required=True
     )
 
-    email = forms.EmailField(
-        widget=forms.EmailInput(
+    new_password = forms.CharField(
+        widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'id': 'email',
-                'placeholder': 'Email',
+                'id': 'new_password',
+                'placeholedr': 'New password',
                 }
-            ),
+        ),
         required=False
-        )
+    )
 
     about_me = forms.CharField(
         widget=forms.TextInput(
@@ -117,10 +124,10 @@ class EditProfileForm(forms.ModelForm):
         required=False,
         )
 
-    new_avatar = forms.ImageField(
+    avatar = forms.ImageField(
         widget=forms.FileInput(
             attrs={
-                'id': 'new_avatar',
+                'id': 'avatar',
                 }
             ),
         required=False,

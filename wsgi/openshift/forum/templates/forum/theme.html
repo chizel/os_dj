@@ -33,7 +33,7 @@
                                     "DD-MMM-YYYY HH:mm:ss")
                                     );</script>
                 <br />
-                {{ post.post}}
+                {{ post.post|linebreaks}}
 
                 {% if forloop.last and post.user_id == user.id and page_obj.number == page_obj.paginator.num_pages%}
                     <a href="{% url 'forum:delete_post' post.id %}">delete</a>

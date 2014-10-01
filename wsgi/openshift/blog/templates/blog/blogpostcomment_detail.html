@@ -3,32 +3,19 @@
 {% block title %}{{ blogpost.title }}{% endblock %}
 
 {% block content %}
-
-<div id="posts">
-    <h1>{{ blogpost.title }}</h1>
-    {{ blogpost.body|linebreaks }}
-    <p>
-        Author: 
-        {% if blogpost.user.avatar %}
-            <img src="/media/user_avatar/{{ blogpost.user.id }}.jpg" height="25px" />
+        {{comment.comment}}
+    <div id="comment">
+        {% if blogpostcomment.user.avatar %}
+            <img src="/media/user_avatar/{{ blogpostcomment.user.id }}.jpg" height="25px" />
         {% else %}
             <img src="/media/user_avatar/default.png" height="25px" />
         {% endif %}
-        <a href="{{ blogpost.user.get_absolute_url }}">{{ blogpost.user.user.username }}</a>
-    </p>
 
+        <a href="{{ blogpostcomment.user.get_absolute_url }}">{{ blogpostcomment.user.user.username }}</a>
+        <script>document.write(moment("{{blogpostcomment.date|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));</script>
+        <p>{{ blogpostcomment.comment}}</p>
+    </div>
 
-    {% if blogpost.tag.all %}
-        Tags: 
-        {% for tag in blogpost.tag.all %}
-            <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
-            {% if not forloop.last %}, {% endif %}
-        {% endfor %}
-    {% endif %}
-</div>
-
-{% if blogpost.count_comments > 0 %}
-    <h2>Comments ({{post.count_comments}}):</h2>
     <div id="comments">
         {% for comment in comments.all %}
             <div id="comment">
@@ -46,8 +33,8 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
 
+{% comment %}
 {% if user.is_authenticated %}
     <!-- comment form -->
     <form class="form-horizontal" role="form" method="post" 
@@ -64,5 +51,6 @@
     </form>
     <!-- end comment form -->
 {% endif %}
+{% endcomment %}
 
 {% endblock %}

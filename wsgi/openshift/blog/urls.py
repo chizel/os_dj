@@ -29,4 +29,8 @@ urlpatterns = patterns(
     # add comment
     url(r'^add_comment/(?P<blogpost_id>\d+)/$',
         views.add_comment, name='add_comment'),
+
+    # show comment
+    url(r'^comment/(?P<pk>\d+)/$', views.ShowComment.as_view(),
+        name='show_comment'),
 )

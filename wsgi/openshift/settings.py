@@ -11,13 +11,15 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 import imp
 
+from iss import *
+
 ON_OPENSHIFT = False
 if os.environ.has_key('OPENSHIFT_REPO_DIR'):
      ON_OPENSHIFT = True
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-default_keys = { 'SECRET_KEY': 'vm4rl5*ymb@2&d_(gc$gb-^twq9w(u69hi--%$5xrh!xk(t%hw' }
+default_keys = {'SECRET_KEY': SECRET_KEY}
 use_keys = default_keys
 
 if ON_OPENSHIFT:
@@ -167,17 +169,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'social.apps.django_app.context_processors.login_redirect',
     'django.contrib.auth.context_processors.auth',
 )
-
-#twitter
-SOCIAL_AUTH_TWITTER_KEY = 'ywIdQZ8GEcVPro2pMdAY7FRvy'
-SOCIAL_AUTH_TWITTER_SECRET = 'HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq'
-
-#github
-SOCIAL_AUTH_GITHUB_KEY = '418f1b0de987958ca56d'
-SOCIAL_AUTH_GITHUB_SECRET = '261db37446f05b88da1e5c0a915708491718aacc'
-
-#facebook
-SOCIAL_AUTH_FACEBOOK_KEY = '1385525765034186'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'ca9e0b0c014909384c3d63336a9ea33e'
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google', 'twitter', 'facebook', 'github')

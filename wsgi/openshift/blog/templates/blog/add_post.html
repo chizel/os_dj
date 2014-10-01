@@ -1,8 +1,13 @@
 {% extends 'basesite/index.html' %}
 
+{% block head %}{{ form.media }}{% endblock %}
+
 {% block title %}Add new post{% endblock %}
 
 {% block content %}
+{{ form.media }}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript" src="{% url "tinymce-js" "NAME" %}"></script>
 
 <form class="form-horizontal" role="form" method="post" action="{% url 'blog:add_post' %}">
 

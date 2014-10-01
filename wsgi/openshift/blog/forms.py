@@ -80,3 +80,16 @@ class BlogPostCommentForm(forms.ModelForm):
         required=True,
         help_text='Blogpost\'s comment',
         )
+
+    #!!!!!!!!!!!!!!! temp !!!!!!!!!!!!!!!
+    pid = forms.CharField(
+        max_length=8,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'pid',
+                }
+            ),
+
+        required=False,
+        )

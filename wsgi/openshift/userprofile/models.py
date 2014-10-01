@@ -9,7 +9,7 @@ class UserProfile(models.Model):
 
     # user's data
     website = models.URLField(blank=True)
-    avatar = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to='user_avatars')
     about_me = models.CharField(max_length=300, blank=True)
 
     # system fields
@@ -60,6 +60,3 @@ class PrivateMessage(models.Model):
 
     def __unicode__(self):
         return "{0}".format(self.message)
-
-    def __repr__(self):
-        return '<PrivateMessage %r>' % (self.message)

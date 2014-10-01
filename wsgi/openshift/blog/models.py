@@ -1,5 +1,6 @@
 from django.db import models
 from userprofile.models import UserProfile
+from tinymce.models import HTMLField
 
 
 class Tag(models.Model):
@@ -28,14 +29,26 @@ class Tag(models.Model):
         return '/blog/tag/%s' % self.name
 
 
+from django import forms
+from django.contrib.flatpages.models import FlatPage
+from tinymce.widgets import TinyMCE
+from tinymce import models as tinymce_models
+
 class BlogPost(models.Model):
+    #class Meta:
+        #model = FlatPage
+
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=120)
-    body = models.TextField()
+    #body = models.TextField()
+    #body = forms.CharField(widget=TinyMCE())
+    body = tinymce_models.HTMLField()
     user = models.ForeignKey(UserProfile, related_name='blog_user')
     date = models.DateTimeField(auto_now_add=True)
     count_comments = models.IntegerField(default=0)
     tag = models.ManyToManyField(Tag)
+    #content = HTMLField()
+
 
     def __unicode__(self):
         return self.title
@@ -63,3 +76,6 @@ class BlogPostComment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
     parent_comment = models.IntegerField(default=0)
+
+    def get_absolute_url(self):
+        return '/blog/comment/%s' % self.post.id

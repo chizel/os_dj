@@ -20,6 +20,7 @@ class SectionsList(ListView):
     context_object_name = 'sections'
     paginate_by = 5
 
+
 class FilesList(ListView):
     model = File
     context_object_name = 'files'
@@ -28,7 +29,6 @@ class FilesList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(FilesList, self).get_context_data(**kwargs)
         return context
-
 
     def get_queryset(self):
         return get_list_or_404(File, section=self.kwargs.get('section_id'))
