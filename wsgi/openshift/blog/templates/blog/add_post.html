@@ -1,19 +1,23 @@
 {% extends 'basesite/index.html' %}
 
-{% block head %}{{ form.media }}{% endblock %}
-
 {% block title %}Add new post{% endblock %}
 
 {% block content %}
-{{ form.media }}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/tiny_mce/tiny_mce.js"></script>
-<script type="text/javascript" src="{% url "tinymce-js" "NAME" %}"></script>
+<textarea  class="ckeditor" cols="80" id="post_body" name="editor1" rows="10">
+</textarea>
+
+<!--<script>-->
+<!--$( document ).ready( function() {-->
+    <!--$( 'textarea#post_body' ).ckeditor();-->
+<!--} );-->
+<!--</script>-->
+
 
 <form class="form-horizontal" role="form" method="post" action="{% url 'blog:add_post' %}">
 
 {% csrf_token %}
-{{ form.as_p }}
 {% comment %}
+{{ form.as_p }}
 <!-- Title -->
 <div class="form-group">
     <label for="title" class="col-lg-2 control-label">Title:</label>

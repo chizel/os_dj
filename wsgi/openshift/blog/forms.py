@@ -29,9 +29,9 @@ class BlogPostForm(forms.ModelForm):
         max_length=3000,
         widget=forms.Textarea(
             attrs={
-                'class': 'form-control',
-                'id': 'body',
-                'placeholder': 'Write your post',
+                'class': 'ckeditor',
+                #'id': 'post_body',
+                #'placeholder': 'Write your post',
                 }
             ),
         required=True,

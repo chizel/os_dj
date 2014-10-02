@@ -35,20 +35,14 @@ from tinymce.widgets import TinyMCE
 from tinymce import models as tinymce_models
 
 class BlogPost(models.Model):
-    #class Meta:
-        #model = FlatPage
-
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=120)
-    #body = models.TextField()
-    #body = forms.CharField(widget=TinyMCE())
+    body = models.TextField()
     body = tinymce_models.HTMLField()
     user = models.ForeignKey(UserProfile, related_name='blog_user')
     date = models.DateTimeField(auto_now_add=True)
     count_comments = models.IntegerField(default=0)
     tag = models.ManyToManyField(Tag)
-    #content = HTMLField()
-
 
     def __unicode__(self):
         return self.title
