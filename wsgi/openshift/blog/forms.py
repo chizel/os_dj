@@ -53,6 +53,10 @@ class BlogPostForm(forms.ModelForm):
 
     def clean_tags(self):
         tags = self.cleaned_data['tags']
+        
+        if not tags:
+            return
+
         r = re.compile('^[\w ,]+$')
 
         if r.match(tags):
@@ -90,6 +94,5 @@ class BlogPostCommentForm(forms.ModelForm):
                 'id': 'pid',
                 }
             ),
-
         required=False,
         )

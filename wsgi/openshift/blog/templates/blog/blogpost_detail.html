@@ -6,7 +6,7 @@
 
 <div id="posts">
     <h1>{{ blogpost.title }}</h1>
-    {{ blogpost.body|linebreaks }}
+    {{ blogpost.body|safe|escape}}
     <p>
         Author: 
         {% if blogpost.user.avatar %}
