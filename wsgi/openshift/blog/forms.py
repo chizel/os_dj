@@ -14,39 +14,18 @@ class BlogPostForm(forms.ModelForm):
 
     title = forms.CharField(
         max_length=120,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'id': 'title',
-                'placeholder': 'Post title',
-                }
-            ),
         required=True,
         help_text='Blogpost\'s title',
         )
 
     body = forms.CharField(
         max_length=3000,
-        widget=forms.Textarea(
-            attrs={
-                'class': 'ckeditor',
-                #'id': 'post_body',
-                #'placeholder': 'Write your post',
-                }
-            ),
         required=True,
         help_text='Blogpost\'s title',
         )
 
     tags = forms.CharField(
         max_length=120,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'id': 'name',
-                'placeholder': 'Tags (comma-separated)',
-                }
-            ),
         required=False,
         help_text='Blogpost\'s tags',
         )
@@ -83,16 +62,4 @@ class BlogPostCommentForm(forms.ModelForm):
             ),
         required=True,
         help_text='Blogpost\'s comment',
-        )
-
-    #!!!!!!!!!!!!!!! temp !!!!!!!!!!!!!!!
-    pid = forms.CharField(
-        max_length=8,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'id': 'pid',
-                }
-            ),
-        required=False,
         )

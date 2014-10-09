@@ -26,6 +26,12 @@ urlpatterns = patterns(
     # add post
     url(r'^add_post/$', views.add_post, name='add_post'),
 
+    # edit post
+    url(r'^edit_post/(?P<pk>\d+)/$', views.edit_post, name='edit_post'),
+
+    # delete post
+    url(r'^delete_post/(?P<pk>\d+)/$', views.delete_post, name='delete_post'),
+
     # add comment
     url(r'^add_comment/(?P<blogpost_id>\d+)/$',
         views.add_comment, name='add_comment'),

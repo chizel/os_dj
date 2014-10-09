@@ -5,6 +5,12 @@
 {% block content %}
 
 <div id="posts">
+    {% if user.id == blogpost.user.id %}
+        <h3>
+            <a href="{% url 'blog:edit_post' blogpost.id %}">Edit post</a><br />
+            <a href="{% url 'blog:delete_post' blogpost.id %}">Delete post</a><br />
+        </h3>
+    {% endif %}
     <h1>{{ blogpost.title }}</h1>
     {{ blogpost.body|safe|escape}}
     <p>

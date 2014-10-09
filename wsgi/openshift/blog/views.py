@@ -96,6 +96,7 @@ class ShowComment(DetailView):
 
 
 @login_required
+@require_POST
 def add_post(request):
     '''Add new blogpost'''
     form = BlogPostForm(request.POST or None)
@@ -118,13 +119,40 @@ def add_post(request):
                     new_tag, created = Tag.objects.get_or_create(name=tag)
                     new_post.tag.add(new_tag.id)
 
-        # ??? may be add to user's profile count of blog's post???
-        # UserProfile.objects.filter(pk=request.user.id).update(count_blog_posts=F('count_blog_posts')+1)
         return redirect('blog:list_of_posts')
     else:
         context = RequestContext(request)
         return render_to_response('blog/add_post.html',
                                   {'form': form}, context)
+
+@login_required
+def edit_post(request, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    context = RequestContext(request)
+
+    if not request.user.id == post.user.id:
+        title = 'Error!'
+        message = 'You\'re not the author of this post!'
+        return render_to_response('basesite/notification.html',
+                                  {'title': title, 'message': message},
+                                  context)
+
+    if request.method == "POST":
+        add_post(request)
+    else:
+        form = BlogPostForm()
+        return render_to_response('blog/add_post.html',
+                                  {'form': form,
+                                   'post':post.body,
+                                   'post_title':post.title,
+                                   'post_tags':post.tag
+                                   },
+                                  context)
+
+
+@login_required
+def delete_post(request, pk):
+    return
 
 
 @login_required
@@ -144,4 +172,7 @@ def add_comment(request, blogpost_id, pid=0):
         new_comment.save()
         post.increment_count_comments()
 
+    form = BlogPostForm(request.POST or None)
+    form = BlogPostForm(request.POST or None)
+    form = BlogPostForm(request.POST or None)
     return redirect(reverse('blog:show_post', args=[blogpost_id]))
