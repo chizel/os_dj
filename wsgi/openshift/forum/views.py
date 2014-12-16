@@ -45,6 +45,8 @@ class PostsList(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(PostsList, self).get_context_data(**kwargs)
         context['form'] = PostForm()
+
+        # data for pagination
         context['pag_url'] = reverse('forum:theme',
                                      kwargs={'theme_id': self.theme_id})
         context['theme'] = get_object_or_404(Theme, pk=self.theme_id)
@@ -62,6 +64,8 @@ def create_post(theme_id, post_body, user_id):
     post.post = post_body
     post.user_id = user_id
     post.save()
+
+    # increment count of posts in author's profile
     UserProfile.objects.filter(pk=user_id).update(
         count_messages=F('count_messages')+1)
     theme.increment_count_posts()
@@ -94,6 +98,8 @@ def create_theme(theme_name, first_post, user_id):
     theme.branch_id = 1
     theme.name = theme_name
     theme.save()
+
+    # create first post in new theme
     create_post(theme.id, first_post, user_id)
     return theme.id
 
