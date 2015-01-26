@@ -21,6 +21,7 @@
         <script src="{% static 'js/jquery.js' %}"></script>
         <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
         <script src="{% static 'js/moment-with-langs.min.js' %}"></script>
+        <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
         <title>{% block title %}{% endblock %}</title>
     </head>
 
@@ -59,11 +60,15 @@
         </div>
         </div>
 
-       <div class="container">
-       <script>
-       moment.lang('ru')
-       </script>
-       {% block content %}{% endblock %}
-       </div>
-   </body>
+        <div class="container">
+        <script>
+        moment.lang('ru');
+        function show_time(time)
+        {
+            document.write(moment("{{time|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));
+        }
+        </script>
+        {% block content %}{% endblock %}
+        </div>
+    </body>
 </html>

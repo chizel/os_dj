@@ -1,0 +1,61 @@
+{% extends 'basesite/index.html' %}
+
+{% block title %}{{ user_profile.user.username }}'s profile{% endblock %}
+
+{% block content %}
+    <div class="block_content">
+
+        <div class="profile_username">
+            <h2>{{ user_profile.user.username }} profile</h2>
+        </div>
+
+        {% if user_profile.avatar %}
+            <img src="/media/user_avatars/{{ user_profile.id }}.jpg" />
+        {% else %}
+            <img src="/media/user_avatars/default.png" />
+        {% endif %}
+
+        <div class="profile_menu">
+            {% if user_profile.id == user.id %}
+                <a href="{% url 'userprofile:edit_profile' %}">Edit profile</a>
+                <br />
+                <a href="{% url 'userprofile:show_pms' %}">Private messages</a>
+
+                <p>Your email: {{ user_profile.user.email }}</p>
+                {% if user_profile.unread_pm %}
+                    <font color="red" size="-1">({{ user_profile.unread_pm }} new!)</font>
+                {% endif %}
+            {% elif user.is_authenticated %}
+                <a href="{% url 'userprofile:show_pm_form' user.id %}">Send private message</a>
+            {% endif %}
+        </div>
+
+        <div class="user_info">
+            <p>Username: {{ user.username }}</p>
+            <p>Last seen:
+                <script>
+                    document.write(moment("{{user.last_login|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));
+                </script>
+            </p>
+            <p>Registered:
+                <script>
+                    document.write(moment("{{user.date_joined|date:"Y-m-d H:m:s"}}").format("DD-MMM-YYYY HH:mm:ss"));
+                </script>
+            </p>
+            <p>Number of messages: {{user_profile.count_messages}}</p>
+
+            {% if user_profile.user.first_name %}
+                <p>Name: {{ user_profile.user.first_name }}</p>
+            {% endif %}
+
+            {% if user_profile.user.last_name %}
+                <p>Last name: {{ user_profile.user.last_name }}</p>
+            {% endif %}
+
+            {% if user_profile.about_me %}
+                About me:
+                {{ user_profile.about_me }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

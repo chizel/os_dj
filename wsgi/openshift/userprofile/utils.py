@@ -14,9 +14,10 @@ def scale_dimensions(width, height, longest_side):
     return (width, height)
 
 
-def resize_image(image, full_path, max_length):
+def resize_image(image, max_length, full_path=None):
     '''resize image longest side to max_length px, other side resize by scale
         full_path must contain full path to image and image name + extenshion
+        if you need just image without saving it, don't pass full_path variable
         '''
 
     image = StringIO.StringIO(image.read())
@@ -28,8 +29,12 @@ def resize_image(image, full_path, max_length):
 
     (width, height) = image.size
     (width, height) = scale_dimensions(width, height, longest_side=160)
-
+    image = image.convert('RGB')
     image = image.resize((width, height), Image.ANTIALIAS)
     image_file = StringIO.StringIO()
-    image.save(full_path, 'JPEG', quality=70)
-    return True
+    if full_path:
+        image.save(full_path, 'JPEG', quality=70)
+        return image
+    else:
+        image.save(image_file, 'JPEG', quality=70)
+        return image_file

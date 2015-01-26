@@ -1,3 +1,4 @@
+iss.py
 *.py[co]
 *.sw[po]
 db.sqlite3

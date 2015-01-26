@@ -4,6 +4,8 @@
 
 {% block content %}
     {% for section in sections %}
-        <a href="{% url 'filesharing:files_list' section.id %}">{{section.name}} ({{section.files_amount}})</a>
+        <p>
+            <a href="{% url 'filesharing:files_list' section.id %}">{{section.name}} ({{section.files_amount}})</a>
+        </p>
     {% endfor %}
 {% endblock %}

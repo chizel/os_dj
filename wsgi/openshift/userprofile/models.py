@@ -3,13 +3,15 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from settings import USER_AVATARS
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
 
     # user's data
     website = models.URLField(blank=True)
-    avatar = models.ImageField(upload_to='user_avatars')
+    avatar = models.ImageField(upload_to=USER_AVATARS)
     about_me = models.CharField(max_length=300, blank=True)
 
     # system fields
@@ -55,6 +57,8 @@ class PrivateMessage(models.Model):
     title = models.CharField(max_length=25)
 
     def set_readed(self):
+        if self.readed:
+            return
         self.readed = True
         self.save()
 

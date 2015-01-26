@@ -4,9 +4,6 @@ from django import forms
 from django.contrib.auth.models import User
 from userprofile.models import UserProfile, PrivateMessage
 
-# hidden_form = forms.CharField(widget=forms.HiddenInput())
-# field_that_not_required = forms.BooleanField(required=False)
-
 
 class RegisterForm(forms.ModelForm):
     class Meta:
@@ -124,7 +121,7 @@ class EditProfileForm(forms.ModelForm):
         required=False,
         )
 
-    avatar = forms.ImageField(
+    new_avatar = forms.ImageField(
         widget=forms.FileInput(
             attrs={
                 'id': 'avatar',

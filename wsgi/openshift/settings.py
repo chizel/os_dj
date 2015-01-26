@@ -107,8 +107,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 #MY_SETTINGS
+DOMAIN = '127.0.01:8000'
+USER_AVATARS = 'user_avatars'
 LOGIN_URL = '/user/login/'
 APPEND_SLASH = True
+
+# EMAIL
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 
 # Application definition
 INSTALLED_APPS = (
@@ -125,6 +132,7 @@ INSTALLED_APPS = (
     'blog',
     'basesite',
     'filesharing',
+    'udacity',
 )
 
 #SOCIAL AUTHORIZATION

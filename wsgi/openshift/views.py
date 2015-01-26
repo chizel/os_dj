@@ -1,4 +1,4 @@
 from django.shortcuts import render_to_response
 
 def home(request):
-     return render_to_response('forum/index.html')
+     return render_to_response('basesite/index.html')

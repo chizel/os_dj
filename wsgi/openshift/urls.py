@@ -7,9 +7,12 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns =[ 
+    url(r'^$', 'views.home'),
+
     url(r'^admin/', include(admin.site.urls)),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url('', include('django.contrib.auth.urls', namespace='auth')), 
+    url(r'^tinymce/', include('tinymce.urls')),
 
     url(r'^forum/', include('forum.urls', namespace='forum')),
     url(r'^user/', include('userprofile.urls', namespace='userprofile')),
