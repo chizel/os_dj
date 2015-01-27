@@ -1,15 +1,7 @@
-"""
-Django settings for openshift project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import imp
+import socket
 
 # my settings
 SECRET_KEY="vm4rl5*ymb@2&d_(gc^gb-^twq9w(u69hi--%&5xrh!xk(t%hw"
@@ -35,11 +27,10 @@ if os.environ.has_key('OPENSHIFT_REPO_DIR'):
      ON_OPENSHIFT = True
 
 DEBUG = not ON_OPENSHIFT
-
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 if ON_OPENSHIFT:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
     SECRET_KEY = os.environ['OPENSHIFT_SECRET_TOKEN']
 else:
     ALLOWED_HOSTS = []
