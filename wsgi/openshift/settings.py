@@ -12,8 +12,23 @@ import os
 import imp
 
 # my settings
-from iss import *
+SECRET_KEY="vm4rl5*ymb@2&d_(gc^gb-^twq9w(u69hi--%&5xrh!xk(t%hw"
 
+# email
+EMAIL_HOST_USER = 'mydjangotest@gmail.com'
+EMAIL_HOST_PASSWORD = 'MYDJ@NG)T*ST'
+
+# twitter
+SOCIAL_AUTH_TWITTER_KEY="ywIdQZ8GEcVPro2pMdAY7FRvy"
+SOCIAL_AUTH_TWITTER_SECRET="HBgvGu16JwHn6SYB9HfcLbIagsgwyAii3TH5winvXilwWTPkvq"
+
+# github
+SOCIAL_AUTH_GITHUB_KEY="418f1b0de987958ca56d"
+SOCIAL_AUTH_GITHUB_SECRET="261db37446f05b88da1e5c0a915708491718aacc"
+
+# facebook
+SOCIAL_AUTH_FACEBOOK_KEY="1385525765034186"
+SOCIAL_AUTH_FACEBOOK_SECRET="ca9e0b0c014909384c3d63336a9ea33e"
 ON_OPENSHIFT = False
 
 if os.environ.has_key('OPENSHIFT_REPO_DIR'):
