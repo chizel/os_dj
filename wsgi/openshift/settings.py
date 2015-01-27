@@ -24,7 +24,7 @@ DEBUG = not ON_OPENSHIFT
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 if ON_OPENSHIFT:
-    ALLOWED_HOSTS = [os.environ['OPENSHIFT_APP_DNS'], socket.gethostname()]
+    ALLOWED_HOSTS = ['*']
     SECRET_KEY = os.environ['OPENSHIFT_SECRET_TOKEN']
 else:
     ALLOWED_HOSTS = []
