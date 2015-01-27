@@ -1,9 +1,9 @@
 from django.conf.urls import patterns, url
-from forum import views
+from udacity import views
 
 urlpatterns = patterns(
     '',
-    url(r'^h/$', views.h),
+    url(r'^hello/$', views.hello),
    # ThemesList.as_view(), name='list_of_themes'),
     #url(r'^(?P<page>\d+)/$', ThemesList.as_view(), name='list_of_themes'),
 
