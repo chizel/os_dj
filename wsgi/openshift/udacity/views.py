@@ -1,4 +1,3 @@
-from django.shortcuts import redirect, render_to_response
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
@@ -12,12 +11,16 @@ from django.core.urlresolvers import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 
+from django.shortcuts import redirect, render_to_response
+from django.views.decorators.csrf import csrf_exempt
+
 
 
 def hello(request):
     return HttpResponse('Hello, Udacity!')
 
 
+@csrf_exempt
 def rot13(request):
     in_text = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
     out_text = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
