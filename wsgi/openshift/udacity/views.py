@@ -27,35 +27,39 @@ def registration(request):
 
         if not USER_RE.match(username):
             return render_to_response('udacity/registration.html',
-                    {'username_error':'Username invalid!'},
-                    context)
+                                      {'username_error': 'Username invalid!'},
+                                      context)
 
         email = request.POST.get('email', '')
         EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
-        
+
         if email and not EMAIL_RE.match(email):
             return render_to_response('udacity/registration.html',
-                    {'email_error':'Email invalid!'},
-                    context)
+                                      {'email_error': 'Email invalid!'},
+                                      context)
 
         password = request.POST.get('password', '')
 
         if len(password) < 3 or len(password) > 20:
-            return render_to_response('udacity/registration.html',
-            {'password_error':'Password length must be more 3 and less 20 characters!'},
-                    context)
+            return render_to_response(
+                'udacity/registration.html',
+                {'password_error':
+                 'Password length must be more 3 and less 20 characters!'},
+                context)
 
         verify = request.POST['verify']
-        
+
         if not verify == password:
             return render_to_response('udacity/registration.html',
-            {'verify_error':'Passwords aren\'t match!'},
-                    context)
+                                      {'verify_error':
+                                          'Passwords aren\'t match!'},
+                                      context)
 
         url = reverse('udacity:regok') + '?username=' + username
         return HttpResponseRedirect(url)
     return render_to_response('udacity/registration.html',
-                                  context)
+                              context)
+
 
 @require_GET
 def regok(request):
@@ -81,8 +85,8 @@ def rot13(request):
 
     context = RequestContext(request)
     return render_to_response('udacity/rot13.html',
-                                  {'answer': answer},
-                                  context)
+                              {'answer': answer},
+                              context)
 
 
 def hello(request):
