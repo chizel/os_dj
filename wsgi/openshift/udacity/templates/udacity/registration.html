@@ -1,0 +1,23 @@
+<form action="{% url 'udacity:registration' %}" method="post">
+    <label>Username
+    <input type="text" name="username" />
+    {{username_error}}
+    </label>
+    <br />
+    <label>Password
+    <input type="text" name="password" />
+    {{password_error}}
+    </label>
+    <br />
+    <label>Re-type password
+    <input type="text" name="verify" />
+    {{verify_error}}
+    </label>
+    <br />
+    <label>Email (optional)
+    <input type="text" name="email" />
+    {{email_error}}
+    </label>
+    <br />
+    <input type="submit" value="Send" />
+</form>

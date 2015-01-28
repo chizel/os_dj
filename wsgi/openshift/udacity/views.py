@@ -1,3 +1,5 @@
+import re
+
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required
@@ -15,9 +17,50 @@ from django.shortcuts import redirect, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 
 
+@csrf_exempt
+def registration(request):
+    context = RequestContext(request)
 
-def hello(request):
-    return HttpResponse('Hello, Udacity!')
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+
+        if not USER_RE.match(username):
+            return render_to_response('udacity/registration.html',
+                    {'username_error':'Username invalid!'},
+                    context)
+
+        email = request.POST.get('email', '')
+        EMAIL_RE = re.compile(r"^[\S]+@[\S]+\.[\S]+$")
+        
+        if email and not EMAIL_RE.match(email):
+            return render_to_response('udacity/registration.html',
+                    {'email_error':'Email invalid!'},
+                    context)
+
+        password = request.POST.get('password', '')
+
+        if len(password) < 3 or len(password) > 20:
+            return render_to_response('udacity/registration.html',
+            {'password_error':'Password length must be more 3 and less 20 characters!'},
+                    context)
+
+        verify = request.POST['verify']
+        
+        if not verify == password:
+            return render_to_response('udacity/registration.html',
+            {'verify_error':'Passwords aren\'t match!'},
+                    context)
+
+        url = reverse('udacity:regok') + '?username=' + username
+        return HttpResponseRedirect(url)
+    return render_to_response('udacity/registration.html',
+                                  context)
+
+@require_GET
+def regok(request):
+    uname = request.GET['username']
+    return HttpResponse('Hello, %s!' % uname)
 
 
 @csrf_exempt
@@ -42,11 +85,5 @@ def rot13(request):
                                   context)
 
 
-@require_GET
-def show(request):
-    context = RequestContext(request)
-    return render_to_response('udacity/show.html',
-                                  {'form': form},
-                                  context)
-
-
+def hello(request):
+    return HttpResponse('Hello, Udacity!')

@@ -5,6 +5,9 @@ urlpatterns = patterns(
     '',
     url(r'^hello/$', views.hello),
     url(r'^rot13/$', views.rot13, name='rot13'),
+    url(r'^registration/$', views.registration, name='registration'),
+    url(r'^regok$', views.regok, name='regok'),
+    #url(r'^regok/(?P<username>[a-zA-Z0-9_-]{3,20})$', views.regok, name='regok'),
    # ThemesList.as_view(), name='list_of_themes'),
     #url(r'^(?P<page>\d+)/$', ThemesList.as_view(), name='list_of_themes'),
 
