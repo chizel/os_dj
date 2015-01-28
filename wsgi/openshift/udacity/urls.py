@@ -4,6 +4,7 @@ from udacity import views
 urlpatterns = patterns(
     '',
     url(r'^hello/$', views.hello),
+    url(r'^rot13/$', views.rot13, name='rot13'),
    # ThemesList.as_view(), name='list_of_themes'),
     #url(r'^(?P<page>\d+)/$', ThemesList.as_view(), name='list_of_themes'),
 

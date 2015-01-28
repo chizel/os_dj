@@ -17,6 +17,28 @@ from django.views.generic import ListView
 def hello(request):
     return HttpResponse('Hello, Udacity!')
 
+
+def rot13(request):
+    in_text = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    out_text = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
+    answer = ''
+
+    if request.method == 'POST':
+        text = request.POST['text']
+
+        for i in text:
+            pos = in_text.find(i)
+            if pos >= 0:
+                answer = answer + out_text[pos]
+            else:
+                answer = answer + i
+
+    context = RequestContext(request)
+    return render_to_response('udacity/rot13.html',
+                                  {'answer': answer},
+                                  context)
+
+
 @require_GET
 def show(request):
     context = RequestContext(request)

@@ -1,0 +1,6 @@
+<form action="{% url 'udacity:rot13' %}" method="post">
+    {% csrf_token %}
+    <textarea name="text">{{answer}}</textarea>
+    <br />
+    <input type="submit" value="Send" />
+</form>
