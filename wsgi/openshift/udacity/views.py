@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
-def registration(request):
+def signup(request):
     context = RequestContext(request)
 
     if request.method == 'POST':
@@ -55,8 +55,10 @@ def registration(request):
                                           'Passwords aren\'t match!'},
                                       context)
 
-        url = reverse('udacity:regok') + '?username=' + username
-        return HttpResponseRedirect(url)
+        url = reverse('udacity:regok')
+        response = HttpResponseRedirect(url)
+        response.set_cookie('', '')
+        return response
     return render_to_response('udacity/registration.html',
                               context)
 
