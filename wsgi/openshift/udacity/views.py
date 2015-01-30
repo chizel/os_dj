@@ -1,4 +1,5 @@
 import re
+import hashlib
 
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_GET, require_POST
@@ -85,7 +86,7 @@ def signup(request):
         response = HttpResponseRedirect(url)
         #response = HttpResponse()
         #response.set_cookie( 'user_id', 2981)
-        response['Set-Cookie'] = 'user_id=24; Path=/;'
+        response['Set-Cookie'] = 'user_id=%s; Path=/;' % hashlib.sha256(username).hexdigest()
         return response
     return render_to_response('udacity/signup.html',
                               context)
@@ -94,9 +95,14 @@ def signup(request):
 @require_GET
 def regok(request):
     if request.user.is_authenticated():
-        uname = request.user.username
-    response = HttpResponse('Hello, %s!' % uname)
-    response['Set-Cookie'] = 'user_id=24; Path=/;'
+        username = request.user.username
+
+        if not request.COOKIES.get('user_id') == hashlib.sha256(username).hexdigest():
+            url = reverse('udacity:signup')
+            return HttpResponseRedirect(url)
+
+    response = HttpResponse('Hello, %s!' % username)
+    #response['Set-Cookie'] = 'user_id=24; Path=/;'
     return response
 
 
