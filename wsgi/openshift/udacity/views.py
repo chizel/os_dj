@@ -67,7 +67,7 @@ def signup(request):
 
         url = reverse('udacity:regok')
         response = HttpResponseRedirect(url)
-        response.set_cookie( 'username', username)
+        response.set_cookie( 'user_id|4fad7a8de8a9f8af', 2981)
         return response
     return render_to_response('udacity/signup.html',
                               context)
