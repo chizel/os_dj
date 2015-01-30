@@ -18,6 +18,21 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 @csrf_exempt
+def login_user(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = authenticate(username=username, password=password)
+        login(request, user)
+        url = reverse('udacity:regok')
+        response = HttpResponseRedirect(url)
+        return response
+    return render_to_response('udacity/login.html',
+                              context) 
+
+
+@csrf_exempt
 def signup(request):
     context = RequestContext(request)
 

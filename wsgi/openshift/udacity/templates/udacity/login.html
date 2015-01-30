@@ -1,0 +1,13 @@
+<form action="{% url 'udacity:login' %}" method="post">
+    <label>Username
+    <input type="text" name="username" />
+    {{username_error}}
+    </label>
+    <br />
+    <label>Password
+    <input type="text" name="password" />
+    {{password_error}}
+    </label>
+    <br />
+    <input type="submit" value="Send" />
+</form>
