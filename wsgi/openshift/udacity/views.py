@@ -27,6 +27,7 @@ def login_user(request):
         login(request, user)
         url = reverse('udacity:regok')
         response = HttpResponseRedirect(url)
+        response['Set-Cookie'] = 'user_id=24; Path=/;'
         return response
     return render_to_response('udacity/login.html',
                               context) 
