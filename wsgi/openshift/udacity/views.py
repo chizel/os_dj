@@ -95,7 +95,9 @@ def signup(request):
 def regok(request):
     if request.user.is_authenticated():
         uname = request.user.username
-    return HttpResponse('Hello, %s!' % uname)
+    response = HttpResponse('Hello, %s!' % uname)
+    response['Set-Cookie'] = 'user_id=24; Path=/;'
+    return response
 
 
 @csrf_exempt
